@@ -1,6 +1,13 @@
 import logo from './logo.svg';
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+
+import Converter from './Converter';
+import Chart from './Chart';
 import './App.css';
+
+const NotFound = () => {
+  return <h2>404 Not Found</h2>;
+};
 
 function App() {
   return (
@@ -13,18 +20,22 @@ function App() {
           <span className='navbar-text'>Free Currency Converter and Exchange Rates</span>
         </div>
       </nav>
-      <div className='container-md bg-light border border-warning'>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt tempore optio facere! Recusandae, qui sequi,
-        corporis ad earum aspernatur blanditiis repellendus ratione magnam, fugit modi optio iste laudantium facere
-        possimus. Eum, at! Soluta ipsa quasi, autem doloremque facere magnam molestias excepturi exercitationem
-        repudiandae ipsam eligendi! Vero sit esse similique placeat! Tenetur debitis dolores harum blanditiis vel ad,
-        voluptate distinctio. Alias. Eum iusto minus nesciunt impedit, velit, ut earum numquam excepturi quisquam
-        provident expedita officiis nisi enim saepe id nihil asperiores repellendus possimus eveniet. Quasi repellat
-        ducimus hic maxime quas obcaecati. Molestiae facere aliquid possimus tempore? Quasi assumenda, exercitationem
-        nostrum reprehenderit veniam natus eos explicabo dolorum asperiores officia modi a, sequi aliquam fuga expedita,
-        accusamus id consequatur aspernatur beatae? Nesciunt, asperiores. Excepturi similique omnis voluptas deleniti
-        rem culpa accusantium cumque sed dolorum nostrum, perferendis assumenda reiciendis, voluptatum nemo itaque ut.
-        Magnam veritatis assumenda impedit doloribus voluptatem minima quia odit quos sed!
+      <div className='container-md'>
+        <div className='row justify-content-center'>
+          <div className='col-8 d-flex'>
+            <Link to='/' className='btn btn-secondary flex-fill me-5'>
+              Currency Converter
+            </Link>
+            <Link to='/chart' className='btn btn-secondary flex-fill'>
+              Exchange Chart
+            </Link>
+          </div>
+        </div>
+        <Switch>
+          <Route path='/' exact component={Converter}></Route>
+          <Route path='/chart' component={Chart}></Route>
+          <Route component={NotFound}></Route>
+        </Switch>
       </div>
       <footer className='border d-flex justify-content-around mt-2'>
         <p>Created by Nathan Peters</p>
