@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 
 import Converter from './Converter';
-import Chart from './Chart';
+import ExchangeRate from './ExchangeRate';
 import Home from './Home';
 import './App.css';
 
@@ -26,7 +26,7 @@ function App() {
         
         <Switch>
           <Route path='/' exact component={Converter}></Route>
-          <Route path='/chart' component={Chart}></Route>
+          <Route path='/chart' component={ExchangeRate}></Route>
           <Route component={NotFound}></Route>
         </Switch>
       </div>
