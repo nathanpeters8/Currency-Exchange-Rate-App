@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 
 import Converter from './Converter';
 import Chart from './Chart';
+import Home from './Home';
 import './App.css';
 
 const NotFound = () => {
@@ -21,44 +22,8 @@ function App() {
         </div>
       </nav>
       <div className='container-md'>
-        <div className='row justify-content-center'>
-          <div className='col-8 d-flex'>
-            <Link to='/' className='btn btn-secondary flex-fill me-5'>
-              Currency Converter
-            </Link>
-            <Link to='/chart' className='btn btn-secondary flex-fill'>
-              Exchange Chart
-            </Link>
-          </div>
-        </div>
-        <div className='container-md d-flex justify-content-center mt-4'>
-          <div className= 'col-2 d-flex flex-column align-items-center'>
-            <label className='form-label'>From</label>
-            <div className="dropdown">
-              <button type='button' className='btn btn-primary dropdown-toggle' data-bs-toggle='dropdown' id='fromDropdown' aria-expanded='false'>
-                USD
-              </button>
-              <ul className="dropdown-menu">
-                <li><a href="#" className="dropdown-item">Link 1</a></li>
-                <li><a href="#" className="dropdown-item">Link 2</a></li>
-                <li><a href="#" className="dropdown-item">Link 3</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className= 'col-2 d-flex flex-column align-items-center'>
-            <label className='form-label'>To</label>
-            <div className="dropdown">
-              <button type='button' className='btn btn-primary dropdown-toggle' data-bs-toggle='dropdown' id='fromDropdown' aria-expanded='false'>
-                EURO
-              </button>
-              <ul className="dropdown-menu">
-                <li><a href="#" className="dropdown-item">Link 1</a></li>
-                <li><a href="#" className="dropdown-item">Link 2</a></li>
-                <li><a href="#" className="dropdown-item">Link 3</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        <Home/>
+        
         <Switch>
           <Route path='/' exact component={Converter}></Route>
           <Route path='/chart' component={Chart}></Route>
