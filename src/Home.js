@@ -1,7 +1,12 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Switch } from 'react-router-dom';
 import { json, checkStatus } from './utils';
+import Converter from './Converter';
+import ExchangeRate from './ExchangeRate';
 
+const NotFound = () => {
+  return <h2>404 Not Found</h2>;
+};
 class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -30,7 +35,14 @@ class Home extends React.Component {
   }
 
   handleChange(event) {
-    console.log(event.target.id + ': ' + event.target.value);
+    if(event.target.id === 'fromDropdown') {
+      this.setState({fromCurrency: event.target.value});
+      console.log(event.target.id + ': ' + event.target.value);
+    }
+    else if(event.target.id === 'toDropdown') {
+      this.setState({toCurrency: event.target.value});
+      console.log(event.target.id + ': ' + event.target.value);
+    }
   }
 
   render() {
@@ -59,6 +71,7 @@ class Home extends React.Component {
                 id='fromDropdown'
                 onChange={this.handleChange}
                 defaultValue={'DEFAULT'}
+                required
               >
                 <option value='DEFAULT' disabled>
                   Choose Currency...
@@ -88,6 +101,7 @@ class Home extends React.Component {
                 id='toDropdown'
                 onChange={this.handleChange}
                 defaultValue={'DEFAULT'}
+                required
               >
                 <option value='DEFAULT' disabled>
                   Choose Currency...
@@ -105,6 +119,15 @@ class Home extends React.Component {
             </div>
           </div>
         </div>
+        <Switch>
+          <Route path='/' exact>
+            <Converter from={this.state.fromCurrency} to={this.state.toCurrency} />
+          </Route>
+          <Route path='/chart'>
+            <ExchangeRate from={this.state.fromCurrency} to={this.state.toCurrency} />
+          </Route>
+          <Route component={NotFound}></Route>
+        </Switch>
       </>
     );
   }
