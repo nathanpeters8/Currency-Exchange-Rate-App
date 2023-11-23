@@ -1,8 +1,52 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Switch } from 'react-router-dom';
+import { json, checkStatus } from './utils';
+import Converter from './Converter';
+import ExchangeRate from './ExchangeRate';
 
+const NotFound = () => {
+  return <h2>404 Not Found</h2>;
+};
 class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currencies: {},
+      fromCurrency: '',
+      toCurrency: ''
+    }
+
+    this.handleChange = this.handleChange.bind(this);
+    this.getCurrencies = this.getCurrencies.bind(this);
+  }
+
+  componentDidMount() {
+    this.getCurrencies();
+  }
+
+  getCurrencies() {
+    fetch(`https://api.frankfurter.app/currencies`)
+    .then(checkStatus)
+    .then(json)
+    .then((data) => {
+      console.log(data);
+      this.setState({currencies: data});
+    })
+  }
+
+  handleChange(event) {
+    if(event.target.id === 'fromDropdown') {
+      this.setState({fromCurrency: event.target.value});
+      console.log(event.target.id + ': ' + event.target.value);
+    }
+    else if(event.target.id === 'toDropdown') {
+      this.setState({toCurrency: event.target.value});
+      console.log(event.target.id + ': ' + event.target.value);
+    }
+  }
+
   render() {
+    const { currencies } = this.state;
     return (
       <>
         {/* Page Buttons */}
@@ -21,72 +65,69 @@ class Home extends React.Component {
           {/* From */}
           <div className='col-6 col-md-3 d-flex flex-column align-items-center justify-content-center mb-4'>
             <label className='form-label'>From</label>
-            <div className='dropdown-center col-12 d-flex'>
-              <button
-                type='button'
-                className='btn btn-primary dropdown-toggle flex-fill'
-                data-bs-toggle='dropdown'
+            <div className='col-12 d-flex'>
+              <select
+                className='btn btn-primary flex-fill'
                 id='fromDropdown'
-                aria-expanded='false'
+                onChange={this.handleChange}
+                defaultValue={'DEFAULT'}
+                required
               >
-                USD
-              </button>
-              <ul className='dropdown-menu'>
-                <li>
-                  <a href='#' className='dropdown-item'>
-                    Link 1
-                  </a>
-                </li>
-                <li>
-                  <a href='#' className='dropdown-item'>
-                    Link 2
-                  </a>
-                </li>
-                <li>
-                  <a href='#' className='dropdown-item'>
-                    Link 3
-                  </a>
-                </li>
-              </ul>
+                <option value='DEFAULT' disabled>
+                  Choose Currency...
+                </option>
+                {(() => {
+                  return Object.keys(currencies).map((curr, i) => {
+                    return (
+                      <option key={i} value={curr}>
+                        {curr} - {currencies[curr]}
+                      </option>
+                    );
+                  });
+                })()}
+              </select>
             </div>
           </div>
           {/* Switch Button */}
-          <div className="col-1 d-flex justify-content-center align-self-center">
+          <div className='col-1 d-flex justify-content-center align-self-center'>
             <i className='btn btn-warning'>\/</i>
           </div>
           {/* To */}
           <div className='col-6 col-md-3 d-flex flex-column align-items-center justify-content-center mt-4 mt-md-0'>
             <label className='form-label'>To</label>
-            <div className='dropdown-center col-12 d-flex'>
-              <button
-                type='button'
-                className='btn btn-primary dropdown-toggle flex-fill'
-                data-bs-toggle='dropdown'
-                id='fromDropdown'
-                aria-expanded='false'
+            <div className='col-12 d-flex'>
+              <select
+                className='btn btn-primary flex-fill'
+                id='toDropdown'
+                onChange={this.handleChange}
+                defaultValue={'DEFAULT'}
+                required
               >
-                EURO
-              </button>
-              <ul className='dropdown-menu'>
-                <li>
-                  <a href='#' className='dropdown-item'>
-                    Link 1
-                  </a>
-                </li>
-                <li>
-                  <a href='#' className='dropdown-item'>
-                    Link 2
-                  </a>
-                </li>
-                <li>
-                  <a href='#' className='dropdown-item'>
-                    Link 3
-                  </a>
-                </li>
-              </ul>
+                <option value='DEFAULT' disabled>
+                  Choose Currency...
+                </option>
+                {(() => {
+                  return Object.keys(currencies).map((curr, i) => {
+                    return (
+                      <option key={i} value={curr}>
+                        {curr} - {currencies[curr]}
+                      </option>
+                    );
+                  });
+                })()}
+              </select>
             </div>
           </div>
         </div>
+        <Switch>
+          <Route path='/' exact>
+            <Converter from={this.state.fromCurrency} to={this.state.toCurrency} />
+          </Route>
+          <Route path='/chart'>
+            <ExchangeRate from={this.state.fromCurrency} to={this.state.toCurrency} />
+          </Route>
+          <Route component={NotFound}></Route>
+        </Switch>
       </>
     );
   }

@@ -3,11 +3,14 @@ import React from 'react';
 class ExchangeRate extends React.Component {
   constructor(props) {
     super(props);
+
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   handleSubmit(event) {
     event.preventDefault();
     console.log('Display Chart');
+    console.log(this.props);
   }
 
   render() {

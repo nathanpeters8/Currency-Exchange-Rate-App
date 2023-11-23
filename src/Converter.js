@@ -1,9 +1,15 @@
 import React from 'react';
 
 class Converter extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
   handleSubmit(event) {
     event.preventDefault();
     console.log(document.getElementById('amount').value);
+    console.log(this.props);
   }
   render() {
     return (

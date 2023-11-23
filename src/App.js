@@ -6,10 +6,6 @@ import ExchangeRate from './ExchangeRate';
 import Home from './Home';
 import './App.css';
 
-const NotFound = () => {
-  return <h2>404 Not Found</h2>;
-};
-
 function App() {
   return (
     <Router basename='/Currency-Exchange-Rate-App'>
@@ -23,12 +19,6 @@ function App() {
       </nav>
       <div className='container-md'>
         <Home/>
-        
-        <Switch>
-          <Route path='/' exact component={Converter}></Route>
-          <Route path='/chart' component={ExchangeRate}></Route>
-          <Route component={NotFound}></Route>
-        </Switch>
       </div>
       <footer className='border d-flex justify-content-around mt-2'>
         <p>Created by Nathan Peters</p>
