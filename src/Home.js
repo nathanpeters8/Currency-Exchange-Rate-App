@@ -12,12 +12,16 @@ class Home extends React.Component {
     super(props);
     this.state = {
       currencies: {},
-      fromCurrency: '',
-      toCurrency: ''
-    }
+      from: '',
+      to: '',
+      conversion: 0,
+      amount: 1.00,
+      error: ''
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.getCurrencies = this.getCurrencies.bind(this);
+    this.getConversion = this.getConversion.bind(this);
   }
 
   componentDidMount() {
@@ -26,32 +30,57 @@ class Home extends React.Component {
 
   getCurrencies() {
     fetch(`https://api.frankfurter.app/currencies`)
-    .then(checkStatus)
-    .then(json)
-    .then((data) => {
-      console.log(data);
-      this.setState({currencies: data});
-    })
+      .then(checkStatus)
+      .then(json)
+      .then((data) => {
+        this.setState({ currencies: data, error: '' });
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({error: error.message})
+      });
+  }
+
+  getConversion(amount) {
+    let { from, to } = this.state;
+    if (from === '' || to === '') {
+      return null;
+    }
+    // let { amount } = this.state;
+    fetch(`https://api.frankfurter.app/latest?amount=${amount}&from=${from}&to=${to}`)
+      .then(checkStatus)
+      .then(json)
+      .then((data) => {
+        // console.log(data);
+        this.setState({ conversion: data.rates[to], error: '' });
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({ error: error.message });
+      });
   }
 
   handleChange(event) {
-    if(event.target.id === 'fromDropdown') {
-      this.setState({fromCurrency: event.target.value});
-      console.log(event.target.id + ': ' + event.target.value);
-    }
-    else if(event.target.id === 'toDropdown') {
-      this.setState({toCurrency: event.target.value});
-      console.log(event.target.id + ': ' + event.target.value);
+    if (event.target.id === 'fromDropdown') {
+      this.setState({ from: event.target.value }, () => {
+        this.getConversion(this.state.amount);
+      });
+      // console.log(event.target.id + ': ' + event.target.value);
+    } else if (event.target.id === 'toDropdown') {
+      this.setState({ to: event.target.value }, () => {
+        this.getConversion(this.state.amount);
+      });
+      // console.log(event.target.id + ': ' + event.target.value);
     }
   }
 
   render() {
-    const { currencies } = this.state;
+    const { currencies, from, to, conversion, amount, error } = this.state;
     return (
       <>
         {/* Page Buttons */}
         <div className='row justify-content-center'>
-          <div className='col-8 d-flex'>
+          <div className='col-8 d-flex justify-content-center'>
             <Link to='/' className='btn btn-secondary flex-fill me-5'>
               Currency Converter
             </Link>
@@ -65,7 +94,7 @@ class Home extends React.Component {
           {/* From */}
           <div className='col-6 col-md-3 d-flex flex-column align-items-center justify-content-center mb-4'>
             <label className='form-label'>From</label>
-            <div className='col-12 d-flex'>
+            <div className='col-12 d-flex justify-content-center'>
               <select
                 className='btn btn-primary flex-fill'
                 id='fromDropdown'
@@ -95,7 +124,7 @@ class Home extends React.Component {
           {/* To */}
           <div className='col-6 col-md-3 d-flex flex-column align-items-center justify-content-center mt-4 mt-md-0'>
             <label className='form-label'>To</label>
-            <div className='col-12 d-flex'>
+            <div className='col-12 d-flex justify-content-center'>
               <select
                 className='btn btn-primary flex-fill'
                 id='toDropdown'
@@ -121,10 +150,18 @@ class Home extends React.Component {
         </div>
         <Switch>
           <Route path='/' exact>
-            <Converter from={this.state.fromCurrency} to={this.state.toCurrency} />
+            <Converter
+              from={from}
+              to={to}
+              currencies={currencies}
+              conversion={conversion}
+              amount={amount}
+              error={error}
+              getConversion={this.getConversion}
+            />
           </Route>
           <Route path='/chart'>
-            <ExchangeRate from={this.state.fromCurrency} to={this.state.toCurrency} />
+            <ExchangeRate from={from} to={to} />
           </Route>
           <Route component={NotFound}></Route>
         </Switch>
