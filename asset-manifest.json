@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/Currency-Exchange-Rate-App/static/css/main.f089c879.css",
-    "main.js": "/Currency-Exchange-Rate-App/static/js/main.680fb31a.js",
+    "main.js": "/Currency-Exchange-Rate-App/static/js/main.d73161e6.js",
     "static/js/787.d0d9fae2.chunk.js": "/Currency-Exchange-Rate-App/static/js/787.d0d9fae2.chunk.js",
     "static/media/logo.svg": "/Currency-Exchange-Rate-App/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/Currency-Exchange-Rate-App/index.html",
     "main.f089c879.css.map": "/Currency-Exchange-Rate-App/static/css/main.f089c879.css.map",
-    "main.680fb31a.js.map": "/Currency-Exchange-Rate-App/static/js/main.680fb31a.js.map",
+    "main.d73161e6.js.map": "/Currency-Exchange-Rate-App/static/js/main.d73161e6.js.map",
     "787.d0d9fae2.chunk.js.map": "/Currency-Exchange-Rate-App/static/js/787.d0d9fae2.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f089c879.css",
-    "static/js/main.680fb31a.js"
+    "static/js/main.d73161e6.js"
   ]
 }
