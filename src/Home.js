@@ -32,6 +32,9 @@ class Home extends React.Component {
       console.log(data);
       this.setState({currencies: data});
     })
+    .catch((error) => {
+      console.log(error);
+    })
   }
 
   handleChange(event) {
@@ -121,7 +124,7 @@ class Home extends React.Component {
         </div>
         <Switch>
           <Route path='/' exact>
-            <Converter from={this.state.fromCurrency} to={this.state.toCurrency} />
+            <Converter from={this.state.fromCurrency} to={this.state.toCurrency} currencies={this.state.currencies}/>
           </Route>
           <Route path='/chart'>
             <ExchangeRate from={this.state.fromCurrency} to={this.state.toCurrency} />
