@@ -6,7 +6,7 @@ class Converter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      amount: 0,
+      amount: 1,
       conversion: -1,
       error: ''
     };
@@ -16,25 +16,26 @@ class Converter extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    let amount = this.handleAmount(document.getElementById('amount').value);
+    let {amount} = this.state;
     if(amount !== -999) {
       this.getConversion(amount);
-      this.setState({ amount: amount });
     }
     else {
       alert("Invalid Amount");
     }
   }
 
-  handleAmount(amount) {
-    if (isNaN(amount)) {
+  handleAmount(event) {
+    if (isNaN(event.target.value) || event.target.value === '') {
       return -999;
     }
-    return parseFloat(amount).toFixed(2);
+    this.getConversion(parseFloat(event.target.value).toFixed(2));
+    this.setState({amount: parseFloat(event.target.value).toFixed(2)});
   }
 
   getConversion(amount) {
     let { from, to } = this.props;
+    // let { amount } = this.state;
     fetch(`https://api.frankfurter.app/latest?amount=${amount}&from=${from}&to=${to}`)
       .then(checkStatus)
       .then(json)
@@ -50,6 +51,7 @@ class Converter extends React.Component {
 
   render() {
     const { amount, conversion, error } = this.state;
+    const { from, to, currencies } = this.props;
     return (
       <>
         <div className='row justify-content-center mt-5'>
@@ -59,10 +61,10 @@ class Converter extends React.Component {
             <form onSubmit={this.handleSubmit} className='form-inline'>
               <div className='input-group' id='amount-input'>
                 <span className='input-group-text'>$</span>
-                <input type='text' className='form-control' id='amount' />
-                <button type='submit' className='btn btn-success'>
+              <input type='text' className='form-control' id='amount' onChange={this.handleAmount} disabled={(from && to ? '' : 'disabled')}/>
+                {/* <button type='submit' className='btn btn-success'>
                   Submit
-                </button>
+                </button> */}
               </div>
             </form>
           </div>
@@ -74,10 +76,10 @@ class Converter extends React.Component {
             }
             return (
               <Conversion
-                to={this.props.to}
-                from={this.props.from}
+                to={to}
+                from={from}
                 amount={amount}
-                currencies={this.props.currencies}
+                currencies={currencies}
                 conversion={conversion}
               />
             );
