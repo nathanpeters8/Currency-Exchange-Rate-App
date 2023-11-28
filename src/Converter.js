@@ -13,6 +13,7 @@ class Converter extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleAmount = this.handleAmount.bind(this);
   }
+
   handleSubmit(event) {
     event.preventDefault();
 

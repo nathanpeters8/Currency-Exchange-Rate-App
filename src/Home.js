@@ -54,7 +54,7 @@ class Home extends React.Component {
       <>
         {/* Page Buttons */}
         <div className='row justify-content-center'>
-          <div className='col-8 d-flex'>
+          <div className='col-8 d-flex justify-content-center'>
             <Link to='/' className='btn btn-secondary flex-fill me-5'>
               Currency Converter
             </Link>
@@ -68,7 +68,7 @@ class Home extends React.Component {
           {/* From */}
           <div className='col-6 col-md-3 d-flex flex-column align-items-center justify-content-center mb-4'>
             <label className='form-label'>From</label>
-            <div className='col-12 d-flex'>
+            <div className='col-12 d-flex justify-content-center'>
               <select
                 className='btn btn-primary flex-fill'
                 id='fromDropdown'
@@ -98,7 +98,7 @@ class Home extends React.Component {
           {/* To */}
           <div className='col-6 col-md-3 d-flex flex-column align-items-center justify-content-center mt-4 mt-md-0'>
             <label className='form-label'>To</label>
-            <div className='col-12 d-flex'>
+            <div className='col-12 d-flex justify-content-center'>
               <select
                 className='btn btn-primary flex-fill'
                 id='toDropdown'
@@ -124,7 +124,7 @@ class Home extends React.Component {
         </div>
         <Switch>
           <Route path='/' exact>
-            <Converter from={this.state.fromCurrency} to={this.state.toCurrency} currencies={this.state.currencies}/>
+            <Converter from={this.state.fromCurrency} to={this.state.toCurrency} currencies={this.state.currencies} onCurrChange={this.onChange}/>
           </Route>
           <Route path='/chart'>
             <ExchangeRate from={this.state.fromCurrency} to={this.state.toCurrency} />
