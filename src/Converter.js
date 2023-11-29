@@ -6,10 +6,12 @@ class Converter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      amount: 1.00,
+      amount: 1.0,
+      conversionList: {}
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleAmount = this.handleAmount.bind(this);
+    this.getConversionList = this.getConversionList.bind(this);
   }
 
   handleSubmit(event) {
@@ -22,17 +24,38 @@ class Converter extends React.Component {
         this.setState({ amount: parseFloat(1).toFixed(2) }, () => {
           this.props.getConversion(1);
         });
-      }
-      else {
-        this.setState({amount: parseFloat(event.target.value).toFixed(2)}, () => {
+      } else {
+        this.setState({ amount: parseFloat(event.target.value).toFixed(2) }, () => {
           this.props.getConversion(this.state.amount);
         });
       }
     }, 750);
   }
 
+  getConversionList() {
+    let { from } = this.props;
+    console.log(from);
+    if (from === '') {
+      return null;
+    }
+    fetch(`https://api.frankfurter.app/latest?from=${from}`)
+      .then(checkStatus)
+      .then(json)
+      .then((data) => {
+        // console.log(Object.keys(data.rates).map((conv, i) => {
+        //   return data.rates[conv];
+        // }));
+        console.log(data.rates);
+        this.setState({ conversionList: data.rates });
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({ error: error.message });
+      });
+  }
+
   render() {
-    const { amount } = this.state;
+    const { amount, conversionList } = this.state;
     const { from, to, currencies, conversion, error } = this.props;
     return (
       <>
@@ -43,16 +66,30 @@ class Converter extends React.Component {
             <form onSubmit={this.handleSubmit} className='form-inline'>
               <div className='input-group' id='amount-input'>
                 <span className='input-group-text'>$</span>
-                <input type='text' className='form-control' id='amount' placeholder='1.00' onChange={this.handleAmount} disabled={(from && to ? '' : 'disabled')}/>
+                <input
+                  type='text'
+                  className='form-control'
+                  id='amount'
+                  placeholder='1.00'
+                  onChange={this.handleAmount}
+                  disabled={from && to ? '' : 'disabled'}
+                />
               </div>
             </form>
           </div>
         </div>
-        <div className={'row justify-content-center flex-column align-items-center mt-5 ' + (conversion === -1 ? 'd-none' : 'd-flex')}>
+        <div
+          className={
+            'row justify-content-center flex-row align-items-center mt-5 ' +
+            (conversion === -1 ? 'd-none' : 'd-flex')
+          }
+        >
           {(() => {
             if (error) {
-              if(amount <= 0) {
-                return <h3 className='text-center text-danger text-uppercase'>Amount must be greater or less than 0</h3>;
+              if (amount <= 0) {
+                return (
+                  <h3 className='text-center text-danger text-uppercase'>Amount must be greater or less than 0</h3>
+                );
               }
             }
             return (
@@ -62,12 +99,12 @@ class Converter extends React.Component {
                 amount={amount}
                 currencies={currencies}
                 conversion={conversion}
+                getConversion={this.props.getConversion}
+                getConversionList={this.getConversionList}
+                conversionList={conversionList}
               />
             );
           })()}
-          <div className="col-6 text-center">
-            <button className='btn btn-warning'>More Exchange Rates for {from}</button>
-          </div>
         </div>
       </>
     );

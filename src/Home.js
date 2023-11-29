@@ -15,6 +15,7 @@ class Home extends React.Component {
       from: '',
       to: '',
       conversion: 0,
+      conversionList: {},
       amount: 1.00,
       error: ''
     };
@@ -22,6 +23,7 @@ class Home extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.getCurrencies = this.getCurrencies.bind(this);
     this.getConversion = this.getConversion.bind(this);
+    // this.getConversionList = this.getConversionList.bind(this);
   }
 
   componentDidMount() {
@@ -59,6 +61,27 @@ class Home extends React.Component {
         this.setState({ error: error.message });
       });
   }
+
+  // getConversionList() {
+  //   let { from } = this.state;
+  //   if (from === '') {
+  //     return null;
+  //   }
+  //   fetch(`https://api.frankfurter.app/latest?from=${from}`)
+  //     .then(checkStatus)
+  //     .then(json)
+  //     .then((data) => {
+  //       // console.log(Object.keys(data.rates).map((conv, i) => {
+  //       //   return data.rates[conv];
+  //       // }));
+  //       console.log(data.rates);
+  //       this.setState({conversionList: data.rates});
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       this.setState({error: error.message});
+  //     })
+  // }
 
   handleChange(event) {
     setTimeout(() => {
