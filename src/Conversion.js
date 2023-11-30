@@ -1,5 +1,4 @@
 import React from 'react';
-import './Conversion.css';
 
 class Conversion extends React.Component {
   constructor(props) {
@@ -41,7 +40,7 @@ class Conversion extends React.Component {
             <button
               className='btn btn-warning'
               onClick={() => {
-                this.props.getConversionList();
+                // this.props.getConversionList(amount);
                 this.setState({ showList: !showList });
               }}
             >
@@ -50,16 +49,17 @@ class Conversion extends React.Component {
           </div>
           <div
             id='conversionTable'
-            className={'col-10 col-md-5 mt-3 mt-md-0 p-1 justify-content-center ' + (showList === true ? 'd-flex' : 'd-none')}
+            className={'col-10 col-md-5 mt-3 mt-md-0 p-1 pt-0 justify-content-center overflow-auto ' + (showList === true ? 'd-flex' : 'd-none')}
+            style={{'height': 300 + 'px'}}
           >
             <table className='table table-bordered table-striped'>
-              {/* <thead>
+              <thead className='sticky-top'>
                 <tr>
-                  <th>Currency</th>
+                  <th>Currency (from {from})</th>
                   <th>Rate</th>
                   <th></th>
                 </tr>
-              </thead> */}
+              </thead>
               <tbody>
                 {(() => {
                   return Object.keys(conversionList).map((conv, i) => {

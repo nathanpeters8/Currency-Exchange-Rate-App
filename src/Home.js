@@ -16,14 +16,15 @@ class Home extends React.Component {
       to: '',
       conversion: 0,
       conversionList: {},
-      amount: 1.00,
-      error: ''
+      amount: 1.0,
+      error: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.getCurrencies = this.getCurrencies.bind(this);
     this.getConversion = this.getConversion.bind(this);
-    // this.getConversionList = this.getConversionList.bind(this);
+    this.getConversionList = this.getConversionList.bind(this);
+    this.changeAmount = this.changeAmount.bind(this);
   }
 
   componentDidMount() {
@@ -39,7 +40,7 @@ class Home extends React.Component {
       })
       .catch((error) => {
         console.log(error);
-        this.setState({error: error.message})
+        this.setState({ error: error.message });
       });
   }
 
@@ -49,7 +50,7 @@ class Home extends React.Component {
       return null;
     }
     // let { amount } = this.state;
-    fetch(`https://api.frankfurter.app/latest?amount=${amount}&from=${from}&to=${to}`)
+    fetch(`https://api.frankfurter.app/latest?amount=${parseInt(amount)}&from=${from}&to=${to}`)
       .then(checkStatus)
       .then(json)
       .then((data) => {
@@ -62,32 +63,32 @@ class Home extends React.Component {
       });
   }
 
-  // getConversionList() {
-  //   let { from } = this.state;
-  //   if (from === '') {
-  //     return null;
-  //   }
-  //   fetch(`https://api.frankfurter.app/latest?from=${from}`)
-  //     .then(checkStatus)
-  //     .then(json)
-  //     .then((data) => {
-  //       // console.log(Object.keys(data.rates).map((conv, i) => {
-  //       //   return data.rates[conv];
-  //       // }));
-  //       console.log(data.rates);
-  //       this.setState({conversionList: data.rates});
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       this.setState({error: error.message});
-  //     })
-  // }
+  getConversionList(amount) {
+    let { from } = this.state;
+    console.log(from);
+    if (from === '') {
+      return null;
+    }
+    fetch(`https://api.frankfurter.app/latest?from=${from}&amount=${parseInt(amount)}`)
+      .then(checkStatus)
+      .then(json)
+      .then((data) => {
+        console.log(data);
+        this.setState({ conversionList: data.rates });
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({ error: error.message });
+      });
+  }
 
   handleChange(event) {
     setTimeout(() => {
       if (event.target.id === 'fromDropdown') {
         this.setState({ from: event.target.value }, () => {
+          console.log(this.state.amount);
           this.getConversion(this.state.amount);
+          this.getConversionList(this.state.amount);
         });
       } else if (event.target.id === 'toDropdown') {
         this.setState({ to: event.target.value }, () => {
@@ -96,9 +97,16 @@ class Home extends React.Component {
       }
     }, 750);
   }
+  
+  changeAmount(newAmount) {
+    this.setState({ amount: parseFloat(newAmount).toFixed(2) }, () => {
+      this.getConversion(this.state.amount);
+      this.getConversionList(this.state.amount);
+    });
+  }
 
   render() {
-    const { currencies, from, to, conversion, amount, error } = this.state;
+    const { currencies, from, to, conversion, amount, error, conversionList } = this.state;
     return (
       <>
         {/* Page Buttons */}
@@ -181,6 +189,9 @@ class Home extends React.Component {
               amount={amount}
               error={error}
               getConversion={this.getConversion}
+              getConversionList={this.getConversionList}
+              conversionList={conversionList}
+              changeAmount={this.changeAmount}
             />
           </Route>
           <Route path='/chart'>
