@@ -78,34 +78,27 @@ class Converter extends React.Component {
             </form>
           </div>
         </div>
-        <div
-          className={
-            'row justify-content-center flex-row align-items-center mt-5 ' +
-            (conversion === -1 ? 'd-none' : 'd-flex')
-          }
-        >
-          {(() => {
-            if (error) {
-              if (amount <= 0) {
-                return (
-                  <h3 className='text-center text-danger text-uppercase'>Amount must be greater or less than 0</h3>
-                );
-              }
+        {(() => {
+          if (error) {
+            if (amount <= 0) {
+              return (
+                <h3 className='text-center text-danger text-uppercase'>Amount must be greater or less than 0</h3>
+              );
             }
-            return (
-              <Conversion
-                to={to}
-                from={from}
-                amount={amount}
-                currencies={currencies}
-                conversion={conversion}
-                getConversion={this.props.getConversion}
-                getConversionList={this.getConversionList}
-                conversionList={conversionList}
-              />
-            );
-          })()}
-        </div>
+          }
+          return (
+            <Conversion
+              to={to}
+              from={from}
+              amount={amount}
+              currencies={currencies}
+              conversion={conversion}
+              getConversion={this.props.getConversion}
+              getConversionList={this.getConversionList}
+              conversionList={conversionList}
+            />
+          );
+        })()}
       </>
     );
   }
