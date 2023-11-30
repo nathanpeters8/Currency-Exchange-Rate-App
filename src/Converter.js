@@ -15,6 +15,9 @@ class Converter extends React.Component {
 
   handleAmount(event) {
     setTimeout(() => {
+      if(isNaN(event.target.value) || event.target.value === '') {
+        this.props.changeAmount(1);
+      }
       this.props.changeAmount(event.target.value);
     }, 750);
   }

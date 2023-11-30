@@ -50,7 +50,7 @@ class Home extends React.Component {
       return null;
     }
     // let { amount } = this.state;
-    fetch(`https://api.frankfurter.app/latest?amount=${parseInt(amount)}&from=${from}&to=${to}`)
+    fetch(`https://api.frankfurter.app/latest?amount=${parseFloat(amount).toFixed(1)}&from=${from}&to=${to}`)
       .then(checkStatus)
       .then(json)
       .then((data) => {
@@ -69,7 +69,7 @@ class Home extends React.Component {
     if (from === '') {
       return null;
     }
-    fetch(`https://api.frankfurter.app/latest?from=${from}&amount=${parseInt(amount)}`)
+    fetch(`https://api.frankfurter.app/latest?from=${from}&amount=${parseFloat(amount).toFixed(1)}`)
       .then(checkStatus)
       .then(json)
       .then((data) => {
@@ -108,7 +108,7 @@ class Home extends React.Component {
   render() {
     const { currencies, from, to, conversion, amount, error, conversionList } = this.state;
     return (
-      <>
+      <div className='container-md'>
         {/* Page Buttons */}
         <div className='row justify-content-center'>
           <div className='col-10 col-sm-6 d-flex justify-content-between'>
@@ -199,7 +199,7 @@ class Home extends React.Component {
           </Route>
           <Route component={NotFound}></Route>
         </Switch>
-      </>
+      </div>
     );
   }
 }

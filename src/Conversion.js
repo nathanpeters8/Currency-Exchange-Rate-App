@@ -29,7 +29,7 @@ class Conversion extends React.Component {
               {to}
             </h2>
             <h5 className='text-center'>
-              {amount} {currencies[from]} =
+              {(isNaN(amount)===true?'1.00':amount)} {currencies[from]} =
             </h5>
             <h3 className='text-center'>
               {conversion} {currencies[to]}s

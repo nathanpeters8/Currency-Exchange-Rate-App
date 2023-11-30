@@ -17,9 +17,9 @@ function App() {
           <span className='navbar-text'>Free Currency Converter and Exchange Rates</span>
         </div>
       </nav>
-      <div className='container-md'>
-        <Home/>
-      </div>
+      
+      <Home/>
+
       <footer className='border d-flex justify-content-around mt-2'>
         <p>Created by Nathan Peters</p>
         <div className='h5'>
