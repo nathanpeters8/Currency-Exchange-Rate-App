@@ -5,42 +5,22 @@ import { json, checkStatus } from './utils';
 class Converter extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      amount: 1.00,
-      error: ''
-    };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleAmount = this.handleAmount.bind(this);
   }
 
   handleSubmit(event) {
     event.preventDefault();
-
-    let {amount} = this.state;
-    if(amount !== -999) {
-      this.props.getConversion(amount);
-    }
-    else {
-      alert("Invalid Amount");
-    }
   }
 
   handleAmount(event) {
-    if (isNaN(event.target.value) || event.target.value === '') {
-      this.setState({ amount: parseFloat(1).toFixed(2) }, () => {
-        this.props.getConversion(1);
-      });
-    }
-    else {
-      this.setState({amount: parseFloat(event.target.value).toFixed(2)}, () => {
-        this.props.getConversion(this.state.amount);
-      });
-    }
+    setTimeout(() => {
+      this.props.changeAmount(event.target.value);
+    }, 750);
   }
 
   render() {
-    const { amount } = this.state;
-    const { from, to, currencies, conversion, error } = this.props;
+    const { from, to, amount, currencies, conversion, error, conversionList } = this.props;
     return (
       <>
         <div className='row justify-content-center mt-5'>
@@ -50,32 +30,39 @@ class Converter extends React.Component {
             <form onSubmit={this.handleSubmit} className='form-inline'>
               <div className='input-group' id='amount-input'>
                 <span className='input-group-text'>$</span>
-              <input type='text' className='form-control' id='amount' placeholder='1.00' onChange={this.handleAmount} disabled={(from && to ? '' : 'disabled')}/>
-                {/* <button type='submit' className='btn btn-success'>
-                  Submit
-                </button> */}
+                <input
+                  type='text'
+                  className='form-control'
+                  id='amount'
+                  placeholder='1.00'
+                  onChange={this.handleAmount}
+                  disabled={from && to ? '' : 'disabled'}
+                />
               </div>
             </form>
           </div>
         </div>
-        <div className={'row justify-content-center mt-5 ' + (conversion === -1 ? 'd-none' : 'd-flex')}>
-          {(() => {
-            if (error) {
-              if(amount <= 0) {
-                return <h3 className='text-center text-danger text-uppercase'>Amount must be greater or less than 0</h3>;
-              }
+        {(() => {
+          if (error) {
+            if (amount <= 0) {
+              return (
+                <h3 className='text-center text-danger text-uppercase'>Amount must be greater or less than 0</h3>
+              );
             }
-            return (
-              <Conversion
-                to={to}
-                from={from}
-                amount={amount}
-                currencies={currencies}
-                conversion={conversion}
-              />
-            );
-          })()}
-        </div>
+          }
+          return (
+            <Conversion
+              to={to}
+              from={from}
+              amount={amount}
+              currencies={currencies}
+              conversion={conversion}
+              getConversion={this.props.getConversion}
+              getConversionList={this.props.getConversionList}
+              conversionList={conversionList}
+            />
+          );
+        })()}
       </>
     );
   }

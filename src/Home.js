@@ -15,13 +15,16 @@ class Home extends React.Component {
       from: '',
       to: '',
       conversion: 0,
-      amount: 1.00,
-      error: ''
+      conversionList: {},
+      amount: 1.0,
+      error: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.getCurrencies = this.getCurrencies.bind(this);
     this.getConversion = this.getConversion.bind(this);
+    this.getConversionList = this.getConversionList.bind(this);
+    this.changeAmount = this.changeAmount.bind(this);
   }
 
   componentDidMount() {
@@ -37,7 +40,7 @@ class Home extends React.Component {
       })
       .catch((error) => {
         console.log(error);
-        this.setState({error: error.message})
+        this.setState({ error: error.message });
       });
   }
 
@@ -47,11 +50,11 @@ class Home extends React.Component {
       return null;
     }
     // let { amount } = this.state;
-    fetch(`https://api.frankfurter.app/latest?amount=${amount}&from=${from}&to=${to}`)
+    fetch(`https://api.frankfurter.app/latest?amount=${parseInt(amount)}&from=${from}&to=${to}`)
       .then(checkStatus)
       .then(json)
       .then((data) => {
-        // console.log(data);
+        console.log(data);
         this.setState({ conversion: data.rates[to], error: '' });
       })
       .catch((error) => {
@@ -60,39 +63,67 @@ class Home extends React.Component {
       });
   }
 
-  handleChange(event) {
-    if (event.target.id === 'fromDropdown') {
-      this.setState({ from: event.target.value }, () => {
-        this.getConversion(this.state.amount);
-      });
-      // console.log(event.target.id + ': ' + event.target.value);
-    } else if (event.target.id === 'toDropdown') {
-      this.setState({ to: event.target.value }, () => {
-        this.getConversion(this.state.amount);
-      });
-      // console.log(event.target.id + ': ' + event.target.value);
+  getConversionList(amount) {
+    let { from } = this.state;
+    console.log(from);
+    if (from === '') {
+      return null;
     }
+    fetch(`https://api.frankfurter.app/latest?from=${from}&amount=${parseInt(amount)}`)
+      .then(checkStatus)
+      .then(json)
+      .then((data) => {
+        console.log(data);
+        this.setState({ conversionList: data.rates });
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({ error: error.message });
+      });
+  }
+
+  handleChange(event) {
+    setTimeout(() => {
+      if (event.target.id === 'fromDropdown') {
+        this.setState({ from: event.target.value }, () => {
+          console.log(this.state.amount);
+          this.getConversion(this.state.amount);
+          this.getConversionList(this.state.amount);
+        });
+      } else if (event.target.id === 'toDropdown') {
+        this.setState({ to: event.target.value }, () => {
+          this.getConversion(this.state.amount);
+        });
+      }
+    }, 750);
+  }
+  
+  changeAmount(newAmount) {
+    this.setState({ amount: parseFloat(newAmount).toFixed(2) }, () => {
+      this.getConversion(this.state.amount);
+      this.getConversionList(this.state.amount);
+    });
   }
 
   render() {
-    const { currencies, from, to, conversion, amount, error } = this.state;
+    const { currencies, from, to, conversion, amount, error, conversionList } = this.state;
     return (
       <>
         {/* Page Buttons */}
         <div className='row justify-content-center'>
-          <div className='col-8 d-flex justify-content-center'>
-            <Link to='/' className='btn btn-secondary flex-fill me-5'>
+          <div className='col-10 col-sm-6 d-flex justify-content-between'>
+            <Link to='/' className='btn btn-secondary col-4'>
               Currency Converter
             </Link>
-            <Link to='/chart' className='btn btn-secondary flex-fill ms-5'>
+            <Link to='/chart' className='btn btn-secondary col-4'>
               Exchange Chart
             </Link>
           </div>
         </div>
         {/* Currency Dropdowns */}
-        <div className='row d-flex flex-column flex-md-row align-items-center align-items-md-start justify-content-md-around mt-4 px-md-5'>
+        <div className='row d-flex flex-column flex-md-row align-items-center align-items-md-start justify-content-md-around justify-content-xl-center mt-4 px-md-5'>
           {/* From */}
-          <div className='col-6 col-md-3 d-flex flex-column align-items-center justify-content-center mb-4'>
+          <div className='col-5 col-md-3 d-flex flex-column align-items-center justify-content-center mb-4'>
             <label className='form-label'>From</label>
             <div className='col-12 d-flex justify-content-center'>
               <select
@@ -122,7 +153,7 @@ class Home extends React.Component {
             <i className='btn btn-warning'>\/</i>
           </div>
           {/* To */}
-          <div className='col-6 col-md-3 d-flex flex-column align-items-center justify-content-center mt-4 mt-md-0'>
+          <div className='col-5 col-md-3 d-flex flex-column align-items-center justify-content-center mt-4 mt-md-0'>
             <label className='form-label'>To</label>
             <div className='col-12 d-flex justify-content-center'>
               <select
@@ -158,6 +189,9 @@ class Home extends React.Component {
               amount={amount}
               error={error}
               getConversion={this.getConversion}
+              getConversionList={this.getConversionList}
+              conversionList={conversionList}
+              changeAmount={this.changeAmount}
             />
           </Route>
           <Route path='/chart'>
