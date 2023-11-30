@@ -12,7 +12,7 @@ class Conversion extends React.Component {
     const { from, to, amount, currencies, conversion, conversionList } = this.props;
     const { showList } = this.state;
 
-    if (from === '' || to === '') {
+    if (from === 'DEFAULT' || to === 'DEFAULT') {
       return null;
     }
     return (

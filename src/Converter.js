@@ -15,11 +15,19 @@ class Converter extends React.Component {
 
   handleAmount(event) {
     setTimeout(() => {
+      if(event.target.value == this.props.amount) {
+        console.log('value are the same');
+        return null;
+      }
       if(isNaN(event.target.value) || event.target.value === '') {
+        console.log('change ' + this.props.amount + ' to 1');
         this.props.changeAmount(1);
       }
-      this.props.changeAmount(event.target.value);
-    }, 750);
+      else {
+        console.log('change ' + this.props.amount + ' to ' + event.target.value);
+        this.props.changeAmount(event.target.value);
+      }
+    }, 1000);
   }
 
   render() {
