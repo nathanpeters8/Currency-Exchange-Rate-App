@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, Switch } from 'react-router-dom';
 
 class Conversion extends React.Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class Conversion extends React.Component {
     const { from, to, amount, currencies, conversion, conversionList } = this.props;
     const { showList } = this.state;
 
-    if (from === '' || to === '') {
+    if (from === 'DEFAULT' || to === 'DEFAULT') {
       return null;
     }
     return (
@@ -29,7 +30,7 @@ class Conversion extends React.Component {
               {to}
             </h2>
             <h5 className='text-center'>
-              {amount} {currencies[from]} =
+              {(isNaN(amount)===true?'1.00':amount)} {currencies[from]} =
             </h5>
             <h3 className='text-center'>
               {conversion} {currencies[to]}s
@@ -64,11 +65,11 @@ class Conversion extends React.Component {
                 {(() => {
                   return Object.keys(conversionList).map((conv, i) => {
                     return (
-                      <tr key={conv} className=''>
-                        <td className=''>{currencies[conv]}</td>
-                        <td className=''>{conversionList[conv]}</td>
-                        <td className=''>
-                          <button>View Chart</button>
+                      <tr key={conv} >
+                        <td>{currencies[conv]}</td>
+                        <td>{conversionList[conv]}</td>
+                        <td >
+                          <Link to='/chart' className='btn btn-sm btn-secondary' onClick={(e) => {this.props.showHistory(e, conv)}}>View History</Link>
                         </td>
                       </tr>
                     );

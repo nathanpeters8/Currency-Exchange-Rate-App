@@ -12,12 +12,13 @@ class Home extends React.Component {
     super(props);
     this.state = {
       currencies: {},
-      from: '',
-      to: '',
+      from: 'DEFAULT',
+      to: 'DEFAULT',
       conversion: 0,
       conversionList: {},
       amount: 1.0,
       error: '',
+      switchButton: false
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -25,6 +26,8 @@ class Home extends React.Component {
     this.getConversion = this.getConversion.bind(this);
     this.getConversionList = this.getConversionList.bind(this);
     this.changeAmount = this.changeAmount.bind(this);
+    this.handleSwitch = this.handleSwitch.bind(this);
+    this.showHistory = this.showHistory.bind(this);
   }
 
   componentDidMount() {
@@ -44,16 +47,17 @@ class Home extends React.Component {
       });
   }
 
-  getConversion(amount) {
-    let { from, to } = this.state;
-    if (from === '' || to === '') {
+  getConversion() {
+    let { from, to, amount } = this.state;
+    let newAmount = parseFloat(amount).toFixed(2);
+    if (from === 'DEFAULT' || to === 'DEFAULT') {
       return null;
     }
-    // let { amount } = this.state;
-    fetch(`https://api.frankfurter.app/latest?amount=${parseInt(amount)}&from=${from}&to=${to}`)
+    fetch(`https://api.frankfurter.app/latest?amount=${newAmount}&from=${from}&to=${to}`)
       .then(checkStatus)
       .then(json)
       .then((data) => {
+        console.log('Single Conversion: ' + from + ' => ' + to);
         console.log(data);
         this.setState({ conversion: data.rates[to], error: '' });
       })
@@ -63,16 +67,17 @@ class Home extends React.Component {
       });
   }
 
-  getConversionList(amount) {
-    let { from } = this.state;
-    console.log(from);
-    if (from === '') {
+  getConversionList() {
+    let { from, amount } = this.state;
+    let newAmount = parseFloat(amount).toFixed(2);
+    if (from === 'DEFAULT') {
       return null;
     }
-    fetch(`https://api.frankfurter.app/latest?from=${from}&amount=${parseInt(amount)}`)
+    fetch(`https://api.frankfurter.app/latest?from=${from}&amount=${newAmount}`)
       .then(checkStatus)
       .then(json)
       .then((data) => {
+        console.log('Conversion List: ' + from);
         console.log(data);
         this.setState({ conversionList: data.rates });
       })
@@ -83,32 +88,52 @@ class Home extends React.Component {
   }
 
   handleChange(event) {
-    setTimeout(() => {
-      if (event.target.id === 'fromDropdown') {
-        this.setState({ from: event.target.value }, () => {
-          console.log(this.state.amount);
-          this.getConversion(this.state.amount);
-          this.getConversionList(this.state.amount);
-        });
-      } else if (event.target.id === 'toDropdown') {
-        this.setState({ to: event.target.value }, () => {
-          this.getConversion(this.state.amount);
-        });
-      }
-    }, 750);
+    if (event.target.id === 'fromDropdown') {
+      this.setState({ from: event.target.value }, () => {
+        setTimeout(() => {
+          this.getConversion();
+          this.getConversionList();
+        }, 500);
+      });
+    } else if (event.target.id === 'toDropdown') {
+      this.setState({ to: event.target.value }, () => {
+        setTimeout(() => {
+          this.getConversion();
+        }, 500);
+      });
+    }
   }
   
   changeAmount(newAmount) {
-    this.setState({ amount: parseFloat(newAmount).toFixed(2) }, () => {
-      this.getConversion(this.state.amount);
-      this.getConversionList(this.state.amount);
+    // console.log(newAmount);
+    this.setState({ amount: newAmount }, () => {
+      this.getConversion();
+      this.getConversionList();
     });
   }
 
+  handleSwitch(event) {
+    let { from, to } = this.state;
+    if(from === 'DEFAULT' || to === 'DEFAULT') {
+      return null; 
+    }
+    this.setState({from: to, to: from}, () => {
+      setTimeout(() => {
+        this.getConversion();
+        this.getConversionList();
+      }, 500);
+    });
+  }
+
+  showHistory(event, conv) {
+    console.log(conv);
+    this.setState({to: conv});
+  }
+
   render() {
-    const { currencies, from, to, conversion, amount, error, conversionList } = this.state;
+    const { currencies, from, to, conversion, amount, error, conversionList, switchButton } = this.state;
     return (
-      <>
+      <div className='container-md'>
         {/* Page Buttons */}
         <div className='row justify-content-center'>
           <div className='col-10 col-sm-6 d-flex justify-content-between'>
@@ -116,7 +141,7 @@ class Home extends React.Component {
               Currency Converter
             </Link>
             <Link to='/chart' className='btn btn-secondary col-4'>
-              Exchange Chart
+              Historical Rates
             </Link>
           </div>
         </div>
@@ -130,7 +155,7 @@ class Home extends React.Component {
                 className='btn btn-primary flex-fill'
                 id='fromDropdown'
                 onChange={this.handleChange}
-                defaultValue={'DEFAULT'}
+                value={from}
                 required
               >
                 <option value='DEFAULT' disabled>
@@ -150,7 +175,9 @@ class Home extends React.Component {
           </div>
           {/* Switch Button */}
           <div className='col-1 d-flex justify-content-center align-self-center'>
-            <i className='btn btn-warning'>\/</i>
+            <i id='switchButton' className='btn btn-warning' onClick={this.handleSwitch}>
+              \/
+            </i>
           </div>
           {/* To */}
           <div className='col-5 col-md-3 d-flex flex-column align-items-center justify-content-center mt-4 mt-md-0'>
@@ -160,7 +187,7 @@ class Home extends React.Component {
                 className='btn btn-primary flex-fill'
                 id='toDropdown'
                 onChange={this.handleChange}
-                defaultValue={'DEFAULT'}
+                value={to}
                 required
               >
                 <option value='DEFAULT' disabled>
@@ -192,6 +219,7 @@ class Home extends React.Component {
               getConversionList={this.getConversionList}
               conversionList={conversionList}
               changeAmount={this.changeAmount}
+              showHistory={this.showHistory}
             />
           </Route>
           <Route path='/chart'>
@@ -199,7 +227,7 @@ class Home extends React.Component {
           </Route>
           <Route component={NotFound}></Route>
         </Switch>
-      </>
+      </div>
     );
   }
 }
