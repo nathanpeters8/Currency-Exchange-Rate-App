@@ -71,6 +71,7 @@ class Converter extends React.Component {
               getConversion={this.props.getConversion}
               getConversionList={this.props.getConversionList}
               conversionList={conversionList}
+              showHistory={this.props.showHistory}
             />
           );
         })()}

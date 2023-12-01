@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, Switch } from 'react-router-dom';
 
 class Conversion extends React.Component {
   constructor(props) {
@@ -64,11 +65,11 @@ class Conversion extends React.Component {
                 {(() => {
                   return Object.keys(conversionList).map((conv, i) => {
                     return (
-                      <tr key={conv} className=''>
-                        <td className=''>{currencies[conv]}</td>
-                        <td className=''>{conversionList[conv]}</td>
-                        <td className=''>
-                          <button>View Chart</button>
+                      <tr key={conv} >
+                        <td>{currencies[conv]}</td>
+                        <td>{conversionList[conv]}</td>
+                        <td >
+                          <Link to='/chart' className='btn btn-sm btn-secondary' onClick={(e) => {this.props.showHistory(e, conv)}}>View History</Link>
                         </td>
                       </tr>
                     );

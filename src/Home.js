@@ -27,6 +27,7 @@ class Home extends React.Component {
     this.getConversionList = this.getConversionList.bind(this);
     this.changeAmount = this.changeAmount.bind(this);
     this.handleSwitch = this.handleSwitch.bind(this);
+    this.showHistory = this.showHistory.bind(this);
   }
 
   componentDidMount() {
@@ -106,10 +107,8 @@ class Home extends React.Component {
   changeAmount(newAmount) {
     // console.log(newAmount);
     this.setState({ amount: newAmount }, () => {
-      setTimeout(() => {
-        this.getConversion();
-        this.getConversionList();
-      }, 750);
+      this.getConversion();
+      this.getConversionList();
     });
   }
 
@@ -126,6 +125,11 @@ class Home extends React.Component {
     });
   }
 
+  showHistory(event, conv) {
+    console.log(conv);
+    this.setState({to: conv});
+  }
+
   render() {
     const { currencies, from, to, conversion, amount, error, conversionList, switchButton } = this.state;
     return (
@@ -137,7 +141,7 @@ class Home extends React.Component {
               Currency Converter
             </Link>
             <Link to='/chart' className='btn btn-secondary col-4'>
-              Exchange Chart
+              Historical Rates
             </Link>
           </div>
         </div>
@@ -171,7 +175,9 @@ class Home extends React.Component {
           </div>
           {/* Switch Button */}
           <div className='col-1 d-flex justify-content-center align-self-center'>
-            <i id='switchButton' className='btn btn-warning' onClick={this.handleSwitch}>\/</i>
+            <i id='switchButton' className='btn btn-warning' onClick={this.handleSwitch}>
+              \/
+            </i>
           </div>
           {/* To */}
           <div className='col-5 col-md-3 d-flex flex-column align-items-center justify-content-center mt-4 mt-md-0'>
@@ -213,6 +219,7 @@ class Home extends React.Component {
               getConversionList={this.getConversionList}
               conversionList={conversionList}
               changeAmount={this.changeAmount}
+              showHistory={this.showHistory}
             />
           </Route>
           <Route path='/chart'>
