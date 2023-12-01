@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Switch } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { json, checkStatus } from './utils';
 import Converter from './Converter';
 import ExchangeRate from './ExchangeRate';
@@ -176,7 +178,7 @@ class Home extends React.Component {
           {/* Switch Button */}
           <div className='col-1 d-flex justify-content-center align-self-center'>
             <i id='switchButton' className='btn btn-warning' onClick={this.handleSwitch}>
-              \/
+              <FontAwesomeIcon icon='fa-solid fa-repeat'/>
             </i>
           </div>
           {/* To */}

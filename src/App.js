@@ -1,10 +1,15 @@
-import logo from './logo.svg';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
-
+import Home from './Home';
 import Converter from './Converter';
 import ExchangeRate from './ExchangeRate';
-import Home from './Home';
+
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { faRepeat, faUserTie } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './App.css';
+
+library.add(faGithub, faRepeat, faLinkedin, faUserTie);
 
 function App() {
   return (
@@ -17,15 +22,19 @@ function App() {
           <span className='navbar-text'>Free Currency Converter and Exchange Rates</span>
         </div>
       </nav>
-      
-      <Home/>
 
-      <footer className='border d-flex justify-content-around mt-2'>
-        <p>Created by Nathan Peters</p>
-        <div className='h5'>
-          <i>Portfolio|</i>
-          <i>LinkedIn|</i>
-          <i>GitHub|</i>
+      <Home />
+
+      <footer className='border mt-2'>
+        <div className="row d-flex justify-content-between">
+          <div className="col-6 d-flex">
+            <p>Created by Nathan Peters</p>
+          </div>
+          <div className='h3 d-flex col-6 align-items-end justify-content-end'>
+            <i className='col-2'><FontAwesomeIcon icon='fa-solid fa-user-tie'/></i>
+            <i className='col-2'><FontAwesomeIcon icon='fa-brands fa-linkedin'/></i>
+            <i className='col-2'><FontAwesomeIcon icon='fa-brands fa-github'/></i>
+          </div>
         </div>
       </footer>
     </Router>
