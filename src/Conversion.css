@@ -1,0 +1,17 @@
+#conversionTable {
+  transition: all 1s ease;
+}
+
+.show {
+  visibility: visible;
+  opacity: 1;
+  max-height: 300px;
+  max-width: 100%;
+}
+
+.hide {
+  visibility: hidden;
+  opacity: 0;
+  max-height: 0;
+  max-width: 0;
+}

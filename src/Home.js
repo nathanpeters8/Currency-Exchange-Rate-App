@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Switch } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { json, checkStatus } from './utils';
 import Converter from './Converter';
 import ExchangeRate from './ExchangeRate';
@@ -133,14 +135,14 @@ class Home extends React.Component {
   render() {
     const { currencies, from, to, conversion, amount, error, conversionList, switchButton } = this.state;
     return (
-      <div className='container-md'>
+      <div className='container-md bg-secondary py-5 px-3'>
         {/* Page Buttons */}
         <div className='row justify-content-center'>
           <div className='col-10 col-sm-6 d-flex justify-content-between'>
-            <Link to='/' className='btn btn-secondary col-4'>
+            <Link to='/' className='btn btn-info col-4'>
               Currency Converter
             </Link>
-            <Link to='/chart' className='btn btn-secondary col-4'>
+            <Link to='/chart' className='btn btn-info col-4'>
               Historical Rates
             </Link>
           </div>
@@ -176,7 +178,7 @@ class Home extends React.Component {
           {/* Switch Button */}
           <div className='col-1 d-flex justify-content-center align-self-center'>
             <i id='switchButton' className='btn btn-warning' onClick={this.handleSwitch}>
-              \/
+              <FontAwesomeIcon icon='fa-solid fa-repeat' />
             </i>
           </div>
           {/* To */}
