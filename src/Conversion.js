@@ -6,13 +6,30 @@ class Conversion extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showList: false
+      showList: false,
+      flexDir: 'column',
     };
+    this.handleListTransition = this.handleListTransition.bind(this);
+  }
+
+  handleListTransition() {
+    let { flexDir } = this.state;
+    if (flexDir === 'column') {
+      this.setState({ flexDir: 'row' }, () => {
+        this.setState({ showList: true });
+      });
+    } else {
+      this.setState({ showList: false }, () => {
+        setTimeout(() => {
+          this.setState({ flexDir: 'column' });
+        }, 1000);
+      });
+    }
   }
 
   render() {
     const { from, to, amount, currencies, conversion, conversionList } = this.props;
-    const { showList } = this.state;
+    const { showList, flexDir } = this.state;
 
     if (from === 'DEFAULT' || to === 'DEFAULT') {
       return null;
@@ -22,14 +39,14 @@ class Conversion extends React.Component {
         <div
           className={
             'row justify-content-between ' +
-            (showList === false ? 'flex-column' : 'flex-column flex-md-row') +
+            (flexDir === 'column' ? 'flex-column' : 'flex-column flex-md-row') +
             ' align-items-center mt-5'
           }
         >
           <div
             className={
-              'col-6 col-md-5 p-1 d-flex flex-column align-items-center' +
-              (showList === false ? 'align-items-center' : 'align-items-center align-items-md-end') +
+              'col-6 col-md-5 p-1 d-flex flex-column ' +
+              (flexDir === 'column' ? 'align-items-center' : 'align-items-center align-items-md-end') +
               ' my-3 px-0'
             }
           >
@@ -49,15 +66,10 @@ class Conversion extends React.Component {
           <div
             className={
               'col-6 d-flex p-1 justify-content-center ' +
-              (showList === true ? 'col-md-1 align-self-md-stretch' : 'col-md-2')
+              (flexDir === 'row' ? 'col-md-1 align-self-md-stretch' : 'col-md-2')
             }
           >
-            <button
-              className='btn btn-warning'
-              onClick={() => {
-                this.setState({ showList: !showList });
-              }}
-            >
+            <button className='btn btn-warning' onClick={this.handleListTransition}>
               More Exchange Rates for {from}
             </button>
           </div>

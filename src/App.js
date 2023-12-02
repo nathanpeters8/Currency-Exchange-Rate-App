@@ -15,7 +15,7 @@ function App() {
   return (
     <Router basename='/Currency-Exchange-Rate-App'>
       <nav className='navbar bg-dark navbar-dark py-0 mb-2'>
-        <div className='container-fluid flex-column align-items-start align-items-md-center'>
+        <div className='container-fluid flex-column align-items-center'>
           <Link to='/' className='navbar-brand text-decoration-underline'>
             CurrExchange
           </Link>

@@ -48,6 +48,7 @@ class Converter extends React.Component {
                   placeholder='1.00'
                   onChange={this.handleAmount}
                   disabled={from && to ? '' : 'disabled'}
+                  maxLength={6}
                 />
               </div>
             </form>
