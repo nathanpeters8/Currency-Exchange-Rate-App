@@ -5,11 +5,11 @@ import ExchangeRate from './ExchangeRate';
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import { faRepeat, faUserTie } from '@fortawesome/free-solid-svg-icons';
+import { faRepeat, faUserTie, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './App.css';
 
-library.add(faGithub, faRepeat, faLinkedin, faUserTie);
+library.add(faGithub, faRepeat, faLinkedin, faUserTie, faArrowRight);
 
 function App() {
   return (

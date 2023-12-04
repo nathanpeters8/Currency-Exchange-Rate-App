@@ -34,8 +34,7 @@ class Converter extends React.Component {
     const { from, to, amount, currencies, conversion, error, conversionList } = this.props;
     return (
       <>
-        <div className='row justify-content-center mt-5'>
-          <h2 className='text-center text-decoration-underline mb-5'>Currency Converter</h2>
+        <div className='row justify-content-center mt-5 mx-auto'>
           <div className='col-6 d-flex flex-column align-items-center mb-4 px-0'>
             <label className='form-label'>Amount</label>
             <form onSubmit={this.handleSubmit} className='form-inline'>

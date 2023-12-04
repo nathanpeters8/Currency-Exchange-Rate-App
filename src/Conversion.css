@@ -2,10 +2,22 @@
   transition: all 1s ease;
 }
 
+#conversion {
+  transition: max-height 0.5s ease-in;
+}
+
+#conversionText {
+  transition: opacity 1s ease-in-out 0.5s;
+}
+
+#buttonDiv {
+  transition: opacity 1s ease-in-out 1s;
+}
+
 .show {
   visibility: visible;
   opacity: 1;
-  max-height: 300px;
+  max-height: 100%;
   max-width: 100%;
 }
 

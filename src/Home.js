@@ -135,7 +135,7 @@ class Home extends React.Component {
   render() {
     const { currencies, from, to, conversion, amount, error, conversionList, switchButton } = this.state;
     return (
-      <div className='container-md bg-secondary py-5 px-3'>
+      <div className='container-md bg-secondary py-5 px-3 mx-auto'>
         {/* Page Buttons */}
         <div className='row justify-content-center'>
           <div className='col-10 col-sm-6 d-flex justify-content-between'>
@@ -148,13 +148,13 @@ class Home extends React.Component {
           </div>
         </div>
         {/* Currency Dropdowns */}
-        <div className='row d-flex flex-column flex-md-row align-items-center align-items-md-start justify-content-md-around justify-content-xl-center mt-4 px-md-5'>
+        <div className='row d-flex flex-column flex-md-row align-items-center align-items-md-start justify-content-center mt-4 px-md-5 text-white'>
           {/* From */}
-          <div className='col-5 col-md-3 d-flex flex-column align-items-center justify-content-center mb-4'>
+          <div className='col-6 col-md-4 d-flex flex-column align-items-center justify-content-center mb-3'>
             <label className='form-label'>From</label>
-            <div className='col-12 d-flex justify-content-center'>
+            <div className='d-flex justify-content-center'>
               <select
-                className='btn btn-primary flex-fill'
+                className='form-select bg-success text-white'
                 id='fromDropdown'
                 onChange={this.handleChange}
                 value={from}
@@ -182,11 +182,11 @@ class Home extends React.Component {
             </i>
           </div>
           {/* To */}
-          <div className='col-5 col-md-3 d-flex flex-column align-items-center justify-content-center mt-4 mt-md-0'>
+          <div className='col-6 col-md-4 d-flex flex-column align-items-center justify-content-center mt-2 mt-md-0'>
             <label className='form-label'>To</label>
-            <div className='col-12 d-flex justify-content-center'>
+            <div className='d-flex justify-content-center'>
               <select
-                className='btn btn-primary flex-fill'
+                className='form-select bg-success text-white'
                 id='toDropdown'
                 onChange={this.handleChange}
                 value={to}
