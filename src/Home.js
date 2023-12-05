@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { json, checkStatus } from './utils';
 import Converter from './Converter';
 import ExchangeRate from './ExchangeRate';
+import './Home.css';
 
 const NotFound = () => {
   return <h2>404 Not Found</h2>;
@@ -135,14 +136,14 @@ class Home extends React.Component {
   render() {
     const { currencies, from, to, conversion, amount, error, conversionList, switchButton } = this.state;
     return (
-      <div className='container-md bg-secondary py-5 px-3 mx-auto'>
+      <div className='container-md py-5 px-3 mx-auto'>
         {/* Page Buttons */}
         <div className='row justify-content-center'>
-          <div className='col-10 col-sm-6 d-flex justify-content-between'>
-            <Link to='/' className='btn btn-info col-4'>
+          <div className='col-10 col-sm-6 d-flex justify-content-between' id='pageButtons'>
+            <Link to='/' className='btn text-white col-4'>
               Currency Converter
             </Link>
-            <Link to='/chart' className='btn btn-info col-4'>
+            <Link to='/chart' className='btn text-white col-4'>
               Historical Rates
             </Link>
           </div>
@@ -154,7 +155,7 @@ class Home extends React.Component {
             <label className='form-label'>From</label>
             <div className='d-flex justify-content-center'>
               <select
-                className='form-select bg-success text-white'
+                className='form-select bg-secondary text-white'
                 id='fromDropdown'
                 onChange={this.handleChange}
                 value={from}
@@ -177,8 +178,8 @@ class Home extends React.Component {
           </div>
           {/* Switch Button */}
           <div className='col-1 d-flex justify-content-center align-self-center'>
-            <i id='switchButton' className='btn btn-warning' onClick={this.handleSwitch}>
-              <FontAwesomeIcon icon='fa-solid fa-repeat' />
+            <i id='switchButton' className='btn' onClick={this.handleSwitch}>
+              <FontAwesomeIcon icon='fa-solid fa-repeat' style={{color: '#ffffff',}} />
             </i>
           </div>
           {/* To */}
@@ -186,7 +187,7 @@ class Home extends React.Component {
             <label className='form-label'>To</label>
             <div className='d-flex justify-content-center'>
               <select
-                className='form-select bg-success text-white'
+                className='form-select bg-secondary text-white'
                 id='toDropdown'
                 onChange={this.handleChange}
                 value={to}

@@ -33,10 +33,6 @@ class Conversion extends React.Component {
     const { from, to, amount, currencies, conversion, conversionList } = this.props;
     const { showList, flexDir } = this.state;
 
-    // if (from === 'DEFAULT' || to === 'DEFAULT') {
-    //   return null;
-    // }
-
     return (
       <>
         <div
@@ -81,19 +77,19 @@ class Conversion extends React.Component {
             }
             id='buttonDiv'
           >
-            <button className='btn btn-warning' onClick={this.handleListTransition}>
+            <button className='btn' onClick={this.handleListTransition}>
               More Exchange Rates for {from}
             </button>
           </div>
           <div
             id='conversionTable'
             className={
-              'col-10 col-md-5 mt-3 ms-2 ms-md-0 mt-md-0 justify-content-center align-items-baseline text-center overflow-auto d-flex ' +
+              'col-10 col-md-5 mt-3 ms-2 ms-md-0 mt-md-0 p-0 pe-1 justify-content-center align-items-baseline text-center overflow-auto d-flex ' +
               (showList === true ? 'show' : 'hide')
             }
             style={{ height: 300 + 'px' }}
           >
-            <table className='table table-bordered table-danger table-striped-columns table-hover'>
+            <table className='table table-bordered table-striped-columns table-hover'>
               <thead className='sticky-top'>
                 <tr>
                   <th>Currency (from {from})</th>
@@ -111,7 +107,7 @@ class Conversion extends React.Component {
                         <td>
                           <Link
                             to='/chart'
-                            className='btn btn-sm btn-secondary'
+                            className='btn btn-sm fw-bold'
                             onClick={(e) => {
                               this.props.showHistory(e, conv);
                             }}

@@ -13,17 +13,17 @@ library.add(faGithub, faRepeat, faLinkedin, faUserTie, faArrowRight);
 
 function App() {
   return (
-    <Router basename='/Currency-Exchange-Rate-App'>
-      <nav className='navbar bg-dark navbar-dark py-0 mb-2'>
+    <Router basename='/Currency-Exchange-Rate-App' id='app'>
+      <nav className='navbar py-0'>
         <div className='container-fluid flex-column align-items-center'>
-          <Link to='/' className='navbar-brand text-decoration-underline'>
-            CurrExchange
+          <Link to='/' className='navbar-brand'>
+            <span className='fw-bold text-capitalize h2'>CurrExchange</span>
           </Link>
-          <span className='navbar-text'>Free Currency Converter and Exchange Rates</span>
+          <span className='navbar-text fw-light font-monospace text-white'>Free Currency Converter and Exchange Rates</span>
         </div>
       </nav>
       <Home />
-      <footer className='container-fluid bg-dark text-white mt-5'>
+      <footer className='container-fluid text-white mt-5'>
         <div className='row d-flex justify-content-around align-items-center'>
           <div className='col-6 d-flex'>
             <h6 className='mb-0'>Created by Nathan Peters</h6>

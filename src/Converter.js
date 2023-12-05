@@ -1,6 +1,7 @@
 import React from 'react';
 import Conversion from './Conversion';
 import { json, checkStatus } from './utils';
+import './Converter.css';
 
 class Converter extends React.Component {
   constructor(props) {
@@ -38,11 +39,11 @@ class Converter extends React.Component {
           <div className='col-6 d-flex flex-column align-items-center mb-4 px-0'>
             <label className='form-label'>Amount</label>
             <form onSubmit={this.handleSubmit} className='form-inline'>
-              <div className='input-group' id='amount-input'>
+              <div className='input-group border-0' id='amount-input'>
                 <span className='input-group-text'>$</span>
                 <input
                   type='text'
-                  className='form-control'
+                  className='form-control text-white'
                   id='amount'
                   placeholder='1.00'
                   onChange={this.handleAmount}
