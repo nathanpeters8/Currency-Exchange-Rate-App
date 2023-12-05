@@ -2,10 +2,27 @@
   transition: all 1s ease;
 }
 
+#conversion {
+  transition: max-height 0.5s ease-in;
+}
+
+#conversionText {
+  transition: opacity 1s ease-in-out 0.5s;
+  color:#d9b310;
+}
+
+#buttonDiv {
+  transition: opacity 1s ease-in-out 1s;
+}
+
+#buttonDiv .btn {
+  color: white;
+}
+
 .show {
   visibility: visible;
   opacity: 1;
-  max-height: 300px;
+  max-height: 100%;
   max-width: 100%;
 }
 
@@ -14,4 +31,23 @@
   opacity: 0;
   max-height: 0;
   max-width: 0;
+}
+
+.btn {
+  background-color: #328cc1;
+}
+
+#conversionTable, th, td, tr {
+  background-color: #d9b310 !important;
+  color: #1d2731 !important;
+  border-color: #1d2731 !important;
+}
+
+#conversionTable .btn {
+  color: #1d2731;
+}
+
+#buttonDiv .btn:hover, #conversionTable .btn:hover {
+  background-color: grey !important;
+  color: #1d2731;
 }

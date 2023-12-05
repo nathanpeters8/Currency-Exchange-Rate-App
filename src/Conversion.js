@@ -1,13 +1,14 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Switch } from 'react-router-dom';
 import './Conversion.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class Conversion extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       showList: false,
-      flexDir: 'column',
+      flexDir: 'column'
     };
     this.handleListTransition = this.handleListTransition.bind(this);
   }
@@ -25,38 +26,42 @@ class Conversion extends React.Component {
         }, 1000);
       });
     }
+    console.log(this.state.flexDir);
   }
 
   render() {
     const { from, to, amount, currencies, conversion, conversionList } = this.props;
     const { showList, flexDir } = this.state;
 
-    if (from === 'DEFAULT' || to === 'DEFAULT') {
-      return null;
-    }
     return (
       <>
         <div
           className={
-            'row justify-content-between ' +
+            'row justify-content-center justify-content-md-between mx-auto ' +
             (flexDir === 'column' ? 'flex-column' : 'flex-column flex-md-row') +
-            ' align-items-center mt-5'
+            ' align-items-center mt-2 ' +
+            (from === 'DEFAULT' || to === 'DEFAULT' ? 'hide' : 'show')
           }
+          id='conversion'
         >
           <div
             className={
               'col-6 col-md-5 p-1 d-flex flex-column ' +
               (flexDir === 'column' ? 'align-items-center' : 'align-items-center align-items-md-end') +
-              ' my-3 px-0'
+              ' my-3 px-0 ' +
+              (from === 'DEFAULT' || to === 'DEFAULT' ? 'hide' : 'show')
             }
+            id='conversionText'
           >
-            <h2 className='text-center fw-bold'>
-              {from}
-              {' => '}
-              {to}
-            </h2>
+            <div className='h2 text-center fw-bold d-flex text-decoration-underline'>
+              <span className='p-2'>{from}</span>
+              <span className='p-2'>
+                <FontAwesomeIcon icon='fa-solid fa-arrow-right' />
+              </span>
+              <span className='p-2'>{to}</span>
+            </div>
             <h5 className='text-center'>
-              {isNaN(amount) === true ? '1.00' : amount} {currencies[from]} =
+              {isNaN(amount) === true ? '1.00' : parseFloat(amount).toFixed(2)} {currencies[from]} =
             </h5>
             <h3 className='text-center'>
               {conversion} {currencies[to]}s
@@ -66,22 +71,25 @@ class Conversion extends React.Component {
           <div
             className={
               'col-6 d-flex p-1 justify-content-center ' +
-              (flexDir === 'row' ? 'col-md-1 align-self-md-stretch' : 'col-md-2')
+              (flexDir === 'row' ? 'col-md-1 align-self-md-stretch' : 'col-md-2') +
+              ' ' +
+              (from === 'DEFAULT' || to === 'DEFAULT' ? 'hide' : 'show')
             }
+            id='buttonDiv'
           >
-            <button className='btn btn-warning' onClick={this.handleListTransition}>
+            <button className='btn' onClick={this.handleListTransition}>
               More Exchange Rates for {from}
             </button>
           </div>
           <div
             id='conversionTable'
             className={
-              'col-10 col-md-5 mt-3 mt-md-0 p-1 pt-0 justify-content-center overflow-auto d-flex ' +
+              'col-10 col-md-5 mt-3 ms-2 ms-md-0 mt-md-0 p-0 pe-1 justify-content-center align-items-baseline text-center overflow-auto d-flex ' +
               (showList === true ? 'show' : 'hide')
             }
             style={{ height: 300 + 'px' }}
           >
-            <table className='table table-bordered rounded table-danger table-striped-columns table-hover'>
+            <table className='table table-bordered table-striped-columns table-hover'>
               <thead className='sticky-top'>
                 <tr>
                   <th>Currency (from {from})</th>
@@ -99,7 +107,7 @@ class Conversion extends React.Component {
                         <td>
                           <Link
                             to='/chart'
-                            className='btn btn-sm btn-secondary'
+                            className='btn btn-sm fw-bold'
                             onClick={(e) => {
                               this.props.showHistory(e, conv);
                             }}
