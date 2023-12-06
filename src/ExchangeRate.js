@@ -1,5 +1,7 @@
 import React from 'react';
 import './ExchangeRate.css';
+
+// ExchangeRate component houses the chart page content that will display the historical rates chart between two currencies
 class ExchangeRate extends React.Component {
   constructor(props) {
     super(props);
@@ -23,7 +25,9 @@ class ExchangeRate extends React.Component {
             {/* <button type='submit' className='btn btn-success' onClick={this.handleSubmit}>
               View Chart
             </button> */}
-            <h6>**Temporary Image for Chart**</h6>
+
+            {/* Chart will go here */}
+            <h6>**Temporary Placeholder Image for Chart**</h6>
             <img src='https://picsum.photos/600/500' alt='temporary pic' />
           </div>
         </div>

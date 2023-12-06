@@ -38,11 +38,6 @@
   color: lightgray;
 }
 
-/* .flashCurrency {
-  transform: translate(0, 1px);
-  color: white;
-} */
-
 h3 span, td span, #currencyText span {
   transition: all 0.5s linear;
 }
@@ -68,4 +63,8 @@ tr {
 #conversionTable .btn:hover {
   background-color: grey !important;
   color: #1d2731;
+}
+
+#conversion-span:hover {
+  color: lightgrey;
 }
