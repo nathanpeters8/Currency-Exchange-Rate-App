@@ -8,9 +8,10 @@ class Conversion extends React.Component {
     super(props);
     this.state = {
       showList: false,
-      flexDir: 'column'
+      flexDir: 'column',
     };
     this.handleListTransition = this.handleListTransition.bind(this);
+    // this.handleValueChange = this.handleValueChange.bind(this);
   }
 
   handleListTransition() {
@@ -29,8 +30,14 @@ class Conversion extends React.Component {
     console.log(this.state.flexDir);
   }
 
+  // handleValueChange() {
+  //   this.setState({valueChange: true}, () => {
+  //     console.log('has changed');
+  //   })
+  // }
+
   render() {
-    const { from, to, amount, currencies, conversion, conversionList } = this.props;
+    const { from, to, amount, currencies, conversion, conversionList, valueChange, currencyChange } = this.props;
     const { showList, flexDir } = this.state;
 
     return (
@@ -53,18 +60,22 @@ class Conversion extends React.Component {
             }
             id='conversionText'
           >
-            <div className='h2 text-center fw-bold d-flex text-decoration-underline'>
-              <span className='p-2'>{from}</span>
+            <div className='h2 text-center fw-bold d-flex text-decoration-underline' id='currencyText'>
+              <span className={'p-2 ' + (currencyChange === 'from' ? 'flash' : '')}>{from}</span>
               <span className='p-2'>
                 <FontAwesomeIcon icon='fa-solid fa-arrow-right' />
               </span>
-              <span className='p-2'>{to}</span>
+              <span className={'p-2 ' + (currencyChange === 'to' ? 'flash' : '')}>{to}</span>
             </div>
             <h5 className='text-center'>
-              {isNaN(amount) === true ? '1.00' : parseFloat(amount).toFixed(2)} {currencies[from]} =
+              <span className={valueChange && currencyChange === 'none' ? 'flash' : ''}>
+                {isNaN(amount) === true ? '1.00' : parseFloat(amount).toFixed(2)}{' '}
+              </span>
+              <span className={currencyChange === 'from' ? 'flash' : ''}>{currencies[from]} =</span>
             </h5>
-            <h3 className='text-center'>
-              {conversion} {currencies[to]}s
+            <h3 className={'text-center fw-semibold'}>
+              <span className={'h2 fw-semibold ' + (valueChange ? 'flash' : '')}>{conversion}</span>{' '}
+              <span className={currencyChange==='to' ? 'flash' : ''}>{currencies[to]}s</span>
             </h3>
             {/* <h6>1 {from} = 1.09999999 {to}</h6> */}
           </div>
@@ -78,7 +89,9 @@ class Conversion extends React.Component {
             id='buttonDiv'
           >
             <button className='btn' onClick={this.handleListTransition}>
-              More Exchange Rates for {from}
+              {(() => {
+                return flexDir === 'row' ? 'Show Less Exchange Rates' : 'More Exchange Rates for ' + from;
+              })()}
             </button>
           </div>
           <div
@@ -92,8 +105,8 @@ class Conversion extends React.Component {
             <table className='table table-bordered table-striped-columns table-hover'>
               <thead className='sticky-top'>
                 <tr>
-                  <th>Currency (from {from})</th>
-                  <th>Rate</th>
+                  <th>Currency</th>
+                  <th className={currencyChange==='from' ? 'flash' : ''}>Rate (from {from})</th>
                   <th></th>
                 </tr>
               </thead>
@@ -103,7 +116,9 @@ class Conversion extends React.Component {
                     return (
                       <tr key={conv}>
                         <td>{currencies[conv]}</td>
-                        <td>{conversionList[conv]}</td>
+                        <td>
+                          <span className={valueChange ? 'flash' : ''}>{conversionList[conv]}</span>
+                        </td>
                         <td>
                           <Link
                             to='/chart'

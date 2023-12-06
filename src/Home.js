@@ -21,7 +21,9 @@ class Home extends React.Component {
       conversionList: {},
       amount: 1.0,
       error: '',
-      switchButton: false
+      switchButton: false,
+      valueChange: false,
+      currencyChange: 'none'
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -92,26 +94,30 @@ class Home extends React.Component {
 
   handleChange(event) {
     if (event.target.id === 'fromDropdown') {
-      this.setState({ from: event.target.value }, () => {
+      this.setState({ from: event.target.value, valueChange: true, currencyChange: 'from' }, () => {
         setTimeout(() => {
           this.getConversion();
           this.getConversionList();
+          this.setState({valueChange: false, currencyChange: 'none'});
         }, 500);
       });
     } else if (event.target.id === 'toDropdown') {
-      this.setState({ to: event.target.value }, () => {
+      this.setState({ to: event.target.value, valueChange: true, currencyChange: 'to'}, () => {
         setTimeout(() => {
           this.getConversion();
+          this.setState({valueChange: false, currencyChange: 'none'});
         }, 500);
       });
     }
   }
   
   changeAmount(newAmount) {
-    // console.log(newAmount);
-    this.setState({ amount: newAmount }, () => {
+    this.setState({ amount: newAmount, valueChange: true }, () => {
       this.getConversion();
       this.getConversionList();
+      setTimeout(() => {
+        this.setState({valueChange: false});
+      }, 500);
     });
   }
 
@@ -223,6 +229,8 @@ class Home extends React.Component {
               conversionList={conversionList}
               changeAmount={this.changeAmount}
               showHistory={this.showHistory}
+              valueChange={this.state.valueChange}
+              currencyChange={this.state.currencyChange}
             />
           </Route>
           <Route path='/chart'>

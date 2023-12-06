@@ -2,3 +2,8 @@
   background-color: #328cc1 !important;
   border: none;
 }
+
+input::placeholder {
+  color: white !important;
+  opacity: 0.5 !important;
+}

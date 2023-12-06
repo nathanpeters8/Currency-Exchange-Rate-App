@@ -16,7 +16,7 @@ class Converter extends React.Component {
 
   handleAmount(event) {
     setTimeout(() => {
-      if(event.target.value == this.props.amount) {
+      if(event.target.value === this.props.amount) {
         console.log('value are the same');
         return null;
       }
@@ -28,11 +28,11 @@ class Converter extends React.Component {
         console.log('change ' + this.props.amount + ' to ' + event.target.value);
         this.props.changeAmount(event.target.value);
       }
-    }, 1000);
+    }, 500);
   }
 
   render() {
-    const { from, to, amount, currencies, conversion, error, conversionList } = this.props;
+    const { from, to, amount, currencies, conversion, error, conversionList, valueChange } = this.props;
     return (
       <>
         <div className='row justify-content-center mt-5 mx-auto'>
@@ -40,7 +40,7 @@ class Converter extends React.Component {
             <label className='form-label'>Amount</label>
             <form onSubmit={this.handleSubmit} className='form-inline'>
               <div className='input-group border-0' id='amount-input'>
-                <span className='input-group-text'>$</span>
+                <span className='input-group-text text-white'>$</span>
                 <input
                   type='text'
                   className='form-control text-white'
@@ -73,6 +73,8 @@ class Converter extends React.Component {
               getConversionList={this.props.getConversionList}
               conversionList={conversionList}
               showHistory={this.props.showHistory}
+              valueChange={this.props.valueChange}
+              currencyChange={this.props.currencyChange}
             />
           );
         })()}
