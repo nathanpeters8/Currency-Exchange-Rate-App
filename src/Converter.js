@@ -47,7 +47,7 @@ class Converter extends React.Component {
                   id='amount'
                   placeholder='1.00'
                   onChange={this.handleAmount}
-                  disabled={from && to ? '' : 'disabled'}
+                  disabled={from !== 'DEFAULT' && to !== 'DEFAULT' ? '' : 'disabled'}
                   maxLength={6}
                 />
               </div>
@@ -75,6 +75,7 @@ class Converter extends React.Component {
               showHistory={this.props.showHistory}
               valueChange={this.props.valueChange}
               currencyChange={this.props.currencyChange}
+              handlePageChange={this.props.handlePageChange}
             />
           );
         })()}

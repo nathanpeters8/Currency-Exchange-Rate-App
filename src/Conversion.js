@@ -61,21 +61,29 @@ class Conversion extends React.Component {
             id='conversionText'
           >
             <div className='h2 text-center fw-bold d-flex text-decoration-underline' id='currencyText'>
-              <span className={'p-2 ' + (currencyChange === 'from' ? 'flash' : '')}>{from}</span>
+              <span className={'p-2 ' + (currencyChange === 'from' || currencyChange === 'both' ? 'flash' : '')}>
+                {from}
+              </span>
               <span className='p-2'>
                 <FontAwesomeIcon icon='fa-solid fa-arrow-right' />
               </span>
-              <span className={'p-2 ' + (currencyChange === 'to' ? 'flash' : '')}>{to}</span>
+              <span className={'p-2 ' + (currencyChange === 'to' || currencyChange === 'both' ? 'flash' : '')}>
+                {to}
+              </span>
             </div>
             <h5 className='text-center'>
               <span className={valueChange && currencyChange === 'none' ? 'flash' : ''}>
                 {isNaN(amount) === true ? '1.00' : parseFloat(amount).toFixed(2)}{' '}
               </span>
-              <span className={currencyChange === 'from' ? 'flash' : ''}>{currencies[from]} =</span>
+              <span className={currencyChange === 'from' || currencyChange === 'both' ? 'flash' : ''}>
+                {currencies[from]} =
+              </span>
             </h5>
             <h3 className={'text-center fw-semibold'}>
               <span className={'h2 fw-semibold ' + (valueChange ? 'flash' : '')}>{conversion}</span>{' '}
-              <span className={currencyChange==='to' ? 'flash' : ''}>{currencies[to]}s</span>
+              <span className={currencyChange === 'to' || currencyChange === 'both' ? 'flash' : ''}>
+                {currencies[to]}s
+              </span>
             </h3>
             {/* <h6>1 {from} = 1.09999999 {to}</h6> */}
           </div>
@@ -106,7 +114,13 @@ class Conversion extends React.Component {
               <thead className='sticky-top'>
                 <tr>
                   <th>Currency</th>
-                  <th className={currencyChange==='from' ? 'flash' : ''}>Rate (from {from})</th>
+                  <th className={currencyChange === 'from' ? 'flash' : ''}>
+                    <span className='small fst-italic font-monospace'>
+                      ({parseFloat(amount).toFixed(2)} {from} =)
+                    </span>
+                    <br></br>
+                    Rate
+                  </th>
                   <th></th>
                 </tr>
               </thead>
@@ -122,9 +136,10 @@ class Conversion extends React.Component {
                         <td>
                           <Link
                             to='/chart'
-                            className='btn btn-sm fw-bold'
+                            className='btn btn-sm fw-bold history-button'
                             onClick={(e) => {
                               this.props.showHistory(e, conv);
+                              this.props.handlePageChange(e);
                             }}
                           >
                             View History

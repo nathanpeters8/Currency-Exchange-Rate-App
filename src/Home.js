@@ -23,7 +23,8 @@ class Home extends React.Component {
       error: '',
       switchButton: false,
       valueChange: false,
-      currencyChange: 'none'
+      currencyChange: 'none',
+      page: 'converter'
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -33,6 +34,7 @@ class Home extends React.Component {
     this.changeAmount = this.changeAmount.bind(this);
     this.handleSwitch = this.handleSwitch.bind(this);
     this.showHistory = this.showHistory.bind(this);
+    this.handlePageChange = this.handlePageChange.bind(this);
   }
 
   componentDidMount() {
@@ -126,10 +128,11 @@ class Home extends React.Component {
     if(from === 'DEFAULT' || to === 'DEFAULT') {
       return null; 
     }
-    this.setState({from: to, to: from}, () => {
+    this.setState({from: to, to: from, valueChange: true, currencyChange: 'both'}, () => {
       setTimeout(() => {
         this.getConversion();
         this.getConversionList();
+        this.setState({valueChange: false, currencyChange: 'none'});
       }, 500);
     });
   }
@@ -139,20 +142,44 @@ class Home extends React.Component {
     this.setState({to: conv});
   }
 
+  handlePageChange(event) {
+    if(event.target.id === 'converter-page') {
+      this.setState({page: 'converter'});
+    }
+    else if(event.target.id === 'chart-page' || event.target.classList.contains('history-button')) {
+      this.setState({page: 'chart'});
+    }
+  }
+
   render() {
-    const { currencies, from, to, conversion, amount, error, conversionList, switchButton } = this.state;
+    const { currencies, from, to, conversion, amount, error, conversionList, switchButton, page } = this.state;
     return (
       <div className='container-md py-5 px-3 mx-auto'>
         {/* Page Buttons */}
         <div className='row justify-content-center'>
           <div className='col-10 col-sm-6 d-flex justify-content-between' id='pageButtons'>
-            <Link to='/' className='btn text-white col-4'>
+            <Link
+              to='/'
+              className={'btn text-white col-4 ' + (page === 'converter' ? 'page-active' : '')}
+              id='converter-page'
+              onClick={this.handlePageChange}
+            >
               Currency Converter
             </Link>
-            <Link to='/chart' className='btn text-white col-4'>
+            <Link
+              to='/chart'
+              className={'btn text-white col-4 ' + (page === 'chart' ? 'page-active' : '')}
+              id='chart-page'
+              onClick={this.handlePageChange}
+            >
               Historical Rates
             </Link>
           </div>
+        </div>
+        <div className='row mt-5'>
+          <h2 className='text-center text-decoration-underline fw-bold' id='pageTitle'>
+            {page === 'converter' ? 'Currency Converter' : 'Historical Rates Chart'}
+          </h2>
         </div>
         {/* Currency Dropdowns */}
         <div className='row d-flex flex-column flex-md-row align-items-center align-items-md-start justify-content-center mt-4 px-md-5 text-white'>
@@ -183,10 +210,15 @@ class Home extends React.Component {
             </div>
           </div>
           {/* Switch Button */}
-          <div className='col-1 d-flex justify-content-center align-self-center'>
-            <i id='switchButton' className='btn' onClick={this.handleSwitch}>
-              <FontAwesomeIcon icon='fa-solid fa-repeat' style={{color: '#ffffff',}} />
-            </i>
+          <div className={'col-1 d-flex justify-content-center align-self-center'}>
+            <button
+              className='btn border-0'
+              id='switchButton'
+              disabled={from !== 'DEFAULT' && to !== 'DEFAULT' ? '' : 'disabled'}
+              onClick={this.handleSwitch}
+            >
+              <FontAwesomeIcon icon='fa-solid fa-repeat' style={{ color: '#ffffff' }} />
+            </button>
           </div>
           {/* To */}
           <div className='col-6 col-md-4 d-flex flex-column align-items-center justify-content-center mt-2 mt-md-0'>
@@ -231,6 +263,7 @@ class Home extends React.Component {
               showHistory={this.showHistory}
               valueChange={this.state.valueChange}
               currencyChange={this.state.currencyChange}
+              handlePageChange={this.handlePageChange}
             />
           </Route>
           <Route path='/chart'>
