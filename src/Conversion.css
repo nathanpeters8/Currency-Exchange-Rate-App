@@ -8,7 +8,7 @@
 
 #conversionText {
   transition: opacity 1s ease-in-out 0.5s;
-  color:#d9b310;
+  color: #d9b310;
 }
 
 #buttonDiv {
@@ -33,11 +33,28 @@
   max-width: 0;
 }
 
+.flash {
+  transform: translate(0, 1px);
+  color: lightgray;
+}
+
+/* .flashCurrency {
+  transform: translate(0, 1px);
+  color: white;
+} */
+
+h3 span, td span, #currencyText span {
+  transition: all 0.5s linear;
+}
+
 .btn {
   background-color: #328cc1;
 }
 
-#conversionTable, th, td, tr {
+#conversionTable,
+th,
+td,
+tr {
   background-color: #d9b310 !important;
   color: #1d2731 !important;
   border-color: #1d2731 !important;
@@ -47,7 +64,8 @@
   color: #1d2731;
 }
 
-#buttonDiv .btn:hover, #conversionTable .btn:hover {
+#buttonDiv .btn:hover,
+#conversionTable .btn:hover {
   background-color: grey !important;
   color: #1d2731;
 }
