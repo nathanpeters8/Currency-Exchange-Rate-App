@@ -17,6 +17,7 @@ class ExchangeRate extends React.Component {
   }
 
   componentDidMount() {
+    this.props.handlePageChange(null, 'chart');
     this.props.getHistoricalRates();
   }
 

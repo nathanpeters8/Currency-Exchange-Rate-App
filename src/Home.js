@@ -27,7 +27,7 @@ class Home extends React.Component {
       switchButton: false,
       valueChange: false,
       currencyChange: 'none',
-      page: 'converter',
+      page: 'converter'
     };
 
     this.chartRef = React.createRef();
@@ -178,14 +178,20 @@ class Home extends React.Component {
   }
 
   // updates page state value whenever the page is changed
-  handlePageChange(event) {
-    if (event.target.id === 'converter-page') {
-      this.setState({ page: 'converter' });
-    } else if (event.target.id === 'chart-page' || event.target.classList.contains('history-button')) {
-      this.setState({ page: 'chart' });
+  handlePageChange(event, pageName='') {
+    if(event === null && pageName!== '') {
+      this.setState({page: pageName});
+    }
+    else {
+      if (event.target.id === 'converter-page') {
+        this.setState({ page: 'converter' });
+      } else if (event.target.id === 'chart-page' || event.target.classList.contains('history-button')) {
+        this.setState({ page: 'chart' });
+      }
     }
   }
 
+  // fetches historical rates from api
   getHistoricalRates() {
     const { from, to } = this.state;
     if (from === 'DEFAULT' || to === 'DEFAULT' || this.chartRef.current === 'null') {
@@ -203,16 +209,18 @@ class Home extends React.Component {
         console.log(data);
         const chartLabels = Object.keys(data.rates);
         const chartData = Object.values(data.rates).map((rate) => rate[to]);
-        const chartLabel = `${from} => ${to}`;
+        const chartLabel = `1 ${from} => ${to}`;
         this.buildChart(chartLabels, chartData, chartLabel);
       })
       .catch((error) => console.error(error.message));
   }
 
+  // resizes chart whenever the screen resizes 
   handleResize(chart) {
     chart.resize();
   }
 
+  // builds a chart with the given historical data
   buildChart(labels, data, label) {
     const chartRef = this.chartRef.current.getContext('2d');
 
@@ -253,11 +261,6 @@ class Home extends React.Component {
             grid: {
               color: '#0b3c5d',
             },
-            title: {
-              display: true,
-              text: 'Dates',
-              color: '#d9b310'
-            },
           },
           y: {
             ticks: {
@@ -265,11 +268,6 @@ class Home extends React.Component {
             },
             grid: {
               color: '#0b3c5d',
-            },
-            title: {
-              display: true,
-              text: `Exchange Rates`,
-              color: '#d9b310'
             },
           },
         },
@@ -414,7 +412,14 @@ class Home extends React.Component {
             />
           </Route>
           <Route path='/chart'>
-            <ExchangeRate from={from} to={to} chartRef={this.chartRef} getHistoricalRates={this.getHistoricalRates} currencyChange={currencyChange} />
+            <ExchangeRate
+              from={from}
+              to={to}
+              chartRef={this.chartRef}
+              getHistoricalRates={this.getHistoricalRates}
+              currencyChange={currencyChange}
+              handlePageChange={this.handlePageChange}
+            />
           </Route>
           <Route component={NotFound}></Route>
         </Switch>

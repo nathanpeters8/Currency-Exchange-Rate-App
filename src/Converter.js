@@ -15,6 +15,10 @@ class Converter extends React.Component {
     event.preventDefault();
   }
 
+  componentDidMount() {
+    this.props.handlePageChange(null, 'converter');
+  }
+
   // checks if amount changes or is not a valid input
   handleAmount(event) {
     // debounce to give user time to stop typing
