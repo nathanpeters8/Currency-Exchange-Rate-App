@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Switch } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Chart from 'chart.js/auto';
 
 import { json, checkStatus } from './utils';
 import Converter from './Converter';
@@ -26,8 +27,10 @@ class Home extends React.Component {
       switchButton: false,
       valueChange: false,
       currencyChange: 'none',
-      page: 'converter'
+      page: 'converter',
     };
+
+    this.chartRef = React.createRef();
 
     this.handleChange = this.handleChange.bind(this);
     this.getCurrencies = this.getCurrencies.bind(this);
@@ -37,6 +40,9 @@ class Home extends React.Component {
     this.handleSwitch = this.handleSwitch.bind(this);
     this.showHistory = this.showHistory.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
+    this.getHistoricalRates = this.getHistoricalRates.bind(this);
+    this.buildChart = this.buildChart.bind(this);
+    this.handleResize = this.handleResize.bind(this);
   }
 
   // gets the list of currencies when component mounts
@@ -116,10 +122,11 @@ class Home extends React.Component {
           // get new conversions and set change values back to original state
           this.getConversion();
           this.getConversionList();
-          this.setState({valueChange: false, currencyChange: 'none'});
+          this.getHistoricalRates();
+          this.setState({ valueChange: false, currencyChange: 'none' });
         }, 500);
-      });  
-    } 
+      });
+    }
     // if 'to' dropdown value changes
     else if (event.target.id === 'toDropdown') {
       // update 'to' currency state value and change state values for animations
@@ -128,19 +135,20 @@ class Home extends React.Component {
         setTimeout(() => {
           // get new conversions and set change values back to original state
           this.getConversion();
+          this.getHistoricalRates();
           this.setState({ valueChange: false, currencyChange: 'none' });
         }, 500);
       });
     }
   }
-  
+
   // updates amount state to new input amount value and get new conversions
   changeAmount(newAmount) {
     this.setState({ amount: newAmount, valueChange: true }, () => {
       this.getConversion();
       this.getConversionList();
       setTimeout(() => {
-        this.setState({valueChange: false});
+        this.setState({ valueChange: false });
       }, 500);
     });
   }
@@ -148,14 +156,15 @@ class Home extends React.Component {
   // handles switching currencies when switch button is clicked and gets new conversion rates
   handleSwitch(event) {
     let { from, to } = this.state;
-    if(from === 'DEFAULT' || to === 'DEFAULT') {
-      return null; 
+    if (from === 'DEFAULT' || to === 'DEFAULT') {
+      return null;
     }
-    this.setState({from: to, to: from, valueChange: true, currencyChange: 'both'}, () => {
+    this.setState({ from: to, to: from, valueChange: true, currencyChange: 'both' }, () => {
       setTimeout(() => {
         this.getConversion();
         this.getConversionList();
-        this.setState({valueChange: false, currencyChange: 'none'});
+        this.getHistoricalRates();
+        this.setState({ valueChange: false, currencyChange: 'none' });
       }, 500);
     });
   }
@@ -163,21 +172,126 @@ class Home extends React.Component {
   // handles switch to chart page when a "View History" button within the table is clicked
   showHistory(event, conv) {
     console.log(conv);
-    this.setState({to: conv});
+    this.setState({ to: conv }, () => {
+      this.getHistoricalRates();
+    });
   }
 
   // updates page state value whenever the page is changed
   handlePageChange(event) {
-    if(event.target.id === 'converter-page') {
-      this.setState({page: 'converter'});
-    }
-    else if(event.target.id === 'chart-page' || event.target.classList.contains('history-button')) {
-      this.setState({page: 'chart'});
+    if (event.target.id === 'converter-page') {
+      this.setState({ page: 'converter' });
+    } else if (event.target.id === 'chart-page' || event.target.classList.contains('history-button')) {
+      this.setState({ page: 'chart' });
     }
   }
 
+  getHistoricalRates() {
+    const { from, to } = this.state;
+    if (from === 'DEFAULT' || to === 'DEFAULT' || this.chartRef.current === 'null') {
+      return null;
+    }
+    // get end and start dates
+    const endDate = new Date().toISOString().split('T')[0];
+    const startDate = new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+    // fetch historical rates from api
+    fetch(`https://api.frankfurter.app/${startDate}..${endDate}?from=${from}&to=${to}`)
+      .then(checkStatus)
+      .then(json)
+      .then((data) => {
+        console.log(data);
+        const chartLabels = Object.keys(data.rates);
+        const chartData = Object.values(data.rates).map((rate) => rate[to]);
+        const chartLabel = `${from} => ${to}`;
+        this.buildChart(chartLabels, chartData, chartLabel);
+      })
+      .catch((error) => console.error(error.message));
+  }
+
+  handleResize(chart) {
+    chart.resize();
+  }
+
+  buildChart(labels, data, label) {
+    const chartRef = this.chartRef.current.getContext('2d');
+
+    if (typeof this.chart !== 'undefined') {
+      this.chart.destroy();
+    }
+
+    this.chart = new Chart(this.chartRef.current.getContext('2d'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: label,
+            data,
+            fill: false,
+            tension: 0,
+            borderColor: '#d9b310',
+            backgroundColor: '#d9b310',
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        onResize: this.handleResize,
+        resizeDelay: 250,
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        scales: {
+          x: {
+            ticks: {
+              color: '#ffffff',
+            },
+            grid: {
+              color: '#0b3c5d',
+            },
+            title: {
+              display: true,
+              text: 'Dates',
+              color: '#d9b310'
+            },
+          },
+          y: {
+            ticks: {
+              color: '#ffffff',
+            },
+            grid: {
+              color: '#0b3c5d',
+            },
+            title: {
+              display: true,
+              text: `Exchange Rates`,
+              color: '#d9b310'
+            },
+          },
+        },
+      },
+    });
+  }
+
   render() {
-    const { currencies, from, to, conversion, amount, error, conversionList, switchButton, page, valueChange, currencyChange } = this.state;
+    const {
+      currencies,
+      from,
+      to,
+      conversion,
+      amount,
+      error,
+      conversionList,
+      switchButton,
+      page,
+      valueChange,
+      currencyChange,
+    } = this.state;
+    
     return (
       <div className='container-md py-5 px-3 mx-auto'>
         <div className='row justify-content-center'>
@@ -221,7 +335,7 @@ class Home extends React.Component {
                 onChange={this.handleChange}
                 value={from}
                 required
-              > 
+              >
                 {/* Default option */}
                 <option value='DEFAULT' disabled>
                   Choose Currency...
@@ -300,7 +414,7 @@ class Home extends React.Component {
             />
           </Route>
           <Route path='/chart'>
-            <ExchangeRate from={from} to={to} />
+            <ExchangeRate from={from} to={to} chartRef={this.chartRef} getHistoricalRates={this.getHistoricalRates} currencyChange={currencyChange} />
           </Route>
           <Route component={NotFound}></Route>
         </Switch>
