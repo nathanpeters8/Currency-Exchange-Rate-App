@@ -15,7 +15,7 @@ library.add(faGithub, faRepeat, faLinkedin, faUserTie, faArrowRight);
 // App component houses the navbar, Home component, and the footer
 function App() {
   return (
-    <Router basename='/Currency-Exchange-Rate-App' id='app'>
+    <Router id='app'>
       {/* Navbar */}
       <nav className='navbar py-0'>
         <div className='container-fluid flex-column align-items-center'>
