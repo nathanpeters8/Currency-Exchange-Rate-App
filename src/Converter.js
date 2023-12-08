@@ -15,6 +15,10 @@ class Converter extends React.Component {
     event.preventDefault();
   }
 
+  componentDidMount() {
+    this.props.handlePageChange(null, 'converter');
+  }
+
   // checks if amount changes or is not a valid input
   handleAmount(event) {
     // debounce to give user time to stop typing
@@ -79,11 +83,10 @@ class Converter extends React.Component {
         {(() => {
           // if amount is 0 do not render Conversion component
           if (error) {
-            if (amount <= 0) {
-              return (
-                <h3 className='text-center text-danger text-uppercase'>Amount must be greater or less than 0</h3>
-              );
-            }
+            return null;
+          }
+          else if(from === to) {
+            return null;
           }
           return (
             <Conversion
