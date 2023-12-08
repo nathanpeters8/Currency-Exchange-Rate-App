@@ -74,6 +74,17 @@ class Home extends React.Component {
       return null;
     }
 
+    // alert user if currencies are the same
+    if(from === to) {
+      alert('Please choose two different currencies.');
+      return null;
+    }
+    // alert user if amount is 0
+    else if(amount == 0) {
+      alert('Amount must be greater or less than 0');
+      return null;
+    }
+
     fetch(`https://api.frankfurter.app/latest?amount=${newAmount}&from=${from}&to=${to}`)
       .then(checkStatus)
       .then(json)
@@ -90,10 +101,10 @@ class Home extends React.Component {
 
   // fetchs conversion rates from given currency to all currencies at given amount
   getConversionList() {
-    let { from, amount } = this.state;
+    let { from, to, amount } = this.state;
     let newAmount = parseFloat(amount).toFixed(2);
 
-    if (from === 'DEFAULT') {
+    if (from === 'DEFAULT' || from === to || amount == 0) {
       return null;
     }
 
@@ -197,6 +208,7 @@ class Home extends React.Component {
     if (from === 'DEFAULT' || to === 'DEFAULT' || this.chartRef.current === 'null') {
       return null;
     }
+    
     // get end and start dates
     const endDate = new Date().toISOString().split('T')[0];
     const startDate = new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
@@ -247,7 +259,7 @@ class Home extends React.Component {
         responsive: true,
         maintainAspectRatio: true,
         onResize: this.handleResize,
-        resizeDelay: 250,
+        resizeDelay: 750,
         plugins: {
           legend: {
             display: false,
